@@ -3,15 +3,19 @@ ENTITIES
 Book
 
       private Integer bookId;
-      private String title;
-      private Section section;
-      private Author[] authors;
+      private String mainTitle;
+      private String[] subTitles;
+      private Subject subject;
+      private Integer[] authorsIds;
       private Integer publisherId;
       private LocalDate yearOfIssue;
+      private Integer numberOfPages;
       private Integer codeISBN;
       private string descriptionURL;
       private String imageURL;
       private BookStatus status;
+
+
 
 Author
 
@@ -33,11 +37,10 @@ enum BookStatus
         OUT,
         ORDERED
 
-Section
-
-        private Integer sectionId;
-        private String sectionName;
-        private String sectionDescription
+Subject
+        private Integer subjectId;
+        private String subjectName;
+        private String subjectDescription
 
 Order
 

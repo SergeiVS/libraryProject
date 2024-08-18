@@ -9,12 +9,27 @@ Check books availability .
 
 That is the minimal library functionality:
 
+Operations with books
+
 1. Add new book
-2. Find book(s) by id, title, author, section, availability
-3. Update books information
-4. Delete item
-5. Compile and answer clients(frontend) requests
-6. Communication with database
+2. Find book by id
+3. Find book(s) by title
+4. Find book(s) by author
+5. Find book(s) by subject
+6. Find book(s) by availability
+7. Find book by ISBN
+8. Update books information
+9. Delete item
+
+Operations with Authors
+
+1. Add new Author
+2. Update Author data
+
+Operations with Publisher
+
+1. Add new Publisher
+2. Update Publisher data
 
 
 
