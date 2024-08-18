@@ -2,97 +2,20 @@ The Library Project
 
 This project is books and readers accounting(Reader side) application.
 It`s aim is create and manage database of books in a library.
-Creat of Book items in database, receive and manage client`s requests and provide complete CRUD operations
-over Book objects.
+Create and save of Book items in the database, receive and manage client`s requests and provide complete
+CRUD operations over Book objects.
+Enable books ordering and provide control over orders.
+Check books availability .
 
 That is the minimal library functionality:
 
 1. Add new book
-2. Find book(s) by id, title, author, section, availability or by combination of parameters
+2. Find book(s) by id, title, author, section, availability
 3. Update books information
 4. Delete item
 5. Compile and answer clients(frontend) requests
 6. Communication with database
 
-ENTITIES(main)
-
-Author
-
-      private Integer authorId;
-      private FullName authorFullName;
-      private String dateOfBirth;
-
-Book
 
 
-
-Additional functionality:
-
-1. Enable to readers:
-    * Register and login into the system
-    * Searching by title
-    * Searching by author
-    * Searching by section
-    * Searching for books availability
-    * Books ordering
-    * Messaging?
-
-2. Enable to librarian (admin):
-    * Get personal information about readers
-    * Get information about reader`s  orders,  taken books, ordered books' history? and punctuality of returns?
-    * Allow or disallow to reader using of library
-    * Searching by title
-    * Searching by author
-    * Searching by section
-    * Searching for books availability
-    * Add and delete users, both readers and librarian
-    * Add new items both books and authors
-    * Delete items both books and authors
-    * Update items both books and authors
-    * Messaging?
-
-ENTITIES(additional)
-
-abstract User
-
-      private Integer userId;
-      private FullName userFullName;
-      private String userLogin;
-      private String userEmail;
-      private UserRole userRole;
-
-Librarian extends User
-
-
-Reader extends User
-
-      private Address readerHomeAddress;
-      private LocalDate readerDateOfBirth;
-      private Strind readerPhoneNumber;
-      private LocalDate readerDateOfRegestration;
-
-
-enum UserRole
-
-      LIBRAIRIAN:.........,
-      READER:...........;
-
-      public UserRole(String roleTitle, Integer RoleCode)
-
-Address
-
-      private String streetName;
-      private String houseNumber;
-      private Integer postalIndex;
-      private String city;
-
-FullName
-
-      private String firstName;
-      private String lastName;
-
-Author
-
-      private Integer authorId;
-      private FullName authorFullName
 
