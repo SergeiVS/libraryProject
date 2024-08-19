@@ -5,9 +5,9 @@ Book
       private Integer bookId;
       private String mainTitle;
       private String[] subTitles;
-      private Author[] author;
+      private Integer[] authorIds;
       private Subject subject;
-      private Publisher publisher;
+      private Integer publisherId;
       private LocalDate yearOfIssue;
       private Integer numberOfPages;
       private String codeISBN;
@@ -29,6 +29,7 @@ Publisher
 
        private String publisherID;
        private String publisherName;
+       private String additionalInfo;
 
 enum BookStatus
 
@@ -40,6 +41,9 @@ Subject
         private Integer subjectId;
         private String subjectName;
         private String subjectDescription
+
+
+Additional task
 
 Order
 

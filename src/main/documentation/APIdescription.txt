@@ -57,7 +57,7 @@ Request:
 Response:
 
             [
-                        {
+                     {
                         "status":
                                     {
                                         "message":"OK",
@@ -87,6 +87,6 @@ Response:
                           "descriptionURL": "",
                           "imageURL": "",
                           "status": "available"
-                          },
-                        {}
+                     },
+                     {}
                     ]
