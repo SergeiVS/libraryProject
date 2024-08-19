@@ -1,0 +1,92 @@
+Add new Book:
+
+Request:
+        [
+            {
+                "mainTitle":"Clear code",
+                "subTitles":[],
+                "authors":  [
+                                {
+                                    "id": "1",
+                                    "firstName": "Robert",
+                                    "lastName": "Martin"
+                                }
+                            ]
+                "publisher":
+                                {
+                                    "id": "1",
+                                    "name": "Prentice Hall"
+                                },
+                "subject": "Computer science"
+                "yearOfIssue": "2005",
+                "numberOfPages": "464",
+                "codeISBN": "978-0132350884",
+                "descriptionURL": "",
+                "imageURL": "",
+                "status": "available"
+            }
+            {}
+        ]
+
+Response:
+
+        [
+            {
+            "status":
+                        {
+                            "message":"OK",
+                            "code": "200"
+            },
+            {
+             "id": 1,
+            },
+            {}
+        ]
+
+
+find Book by id:
+
+Request:
+
+           [
+                {
+                    "id": "1"
+                }
+           ]
+
+Response:
+
+            [
+                        {
+                        "status":
+                                    {
+                                        "message":"OK",
+                                        "code": "200"
+                        },
+                        {
+                         "id": 1,
+                         "mainTitle":"Clear code",
+                          "subTitles":[],
+                          "authors":  [
+                                                     {
+                                                         "id": "1",
+                                                         "firstName": "Robert",
+                                                         "lastName": "Martin"
+                                                     }
+                                                     {}                                                                                                          }
+                                       ]
+                          "publisher":
+                                                     {
+                                                             "id": "1",
+                                                             "name": "Prentice Hall"
+                                                     }
+                          "subject": "Computer science"
+                          "yearOfIssue": "2005",
+                          "numberOfPages": "464",
+                          "codeISBN": "978-0132350884",
+                          "descriptionURL": "",
+                          "imageURL": "",
+                          "status": "available"
+                          },
+                        {}
+                    ]

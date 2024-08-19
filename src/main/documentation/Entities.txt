@@ -5,12 +5,12 @@ Book
       private Integer bookId;
       private String mainTitle;
       private String[] subTitles;
+      private Author[] author;
       private Subject subject;
-      private Integer[] authorsIds;
-      private Integer publisherId;
+      private Publisher publisher;
       private LocalDate yearOfIssue;
       private Integer numberOfPages;
-      private Integer codeISBN;
+      private String codeISBN;
       private string descriptionURL;
       private String imageURL;
       private BookStatus status;
@@ -19,7 +19,6 @@ Book
 
 Author
 
-      private Integer authorId;
       private Integer authorId;
       private String firstName;
       private String lastName;
