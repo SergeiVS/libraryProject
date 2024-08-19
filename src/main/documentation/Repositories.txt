@@ -1,0 +1,17 @@
+BooksRepositoryInterface
+
+    Integer addNewBook(Book book);
+    Book[] findAllBooks();
+    Book findBookById(Integer id);
+    Book[] findBooksByTitle(String title);
+    Book[] findBooksByAuthorId(Integer id);
+    Book[] findBooksByStatus(BookStatus status);
+    Book[] findBooksBySubjectId(Integer id);
+    Book[] findBooksByAvailability(BookStatus status);
+    Book[] findBooksByCodeISBN(String codeISBN);
+    Book updateBookData(Integer bookId, Book newBookData);
+    Boolean deleteBookById(Integer id);
+
+AuthorsRepositoryInterface
+
+

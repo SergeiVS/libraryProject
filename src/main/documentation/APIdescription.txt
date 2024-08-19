@@ -23,7 +23,7 @@ Request:
                 "codeISBN": "978-0132350884",
                 "descriptionURL": "",
                 "imageURL": "",
-                "status": "available"
+                "status": "AVAILABLE"
             }
             {}
         ]
