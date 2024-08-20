@@ -1,21 +1,18 @@
 ENTITIES
-
+Minimal task:
 Book
 
       private Integer bookId;
       private String mainTitle;
-      private String[] subTitles;
-      private Integer[] authorIds;
-      private Subject subject;
-      private Integer publisherId;
+      private Set<Author> authors;(many-to-many relation)
+      private Subject subject;(many-to-one relation)
+      private Integer publisherId;(many-to-one relation)
       private LocalDate yearOfIssue;
       private Integer numberOfPages;
       private String codeISBN;
       private string descriptionURL;
       private String imageURL;
       private BookStatus status;
-
-
 
 Author
 
@@ -48,12 +45,12 @@ Additional task
 Order
 
         private Integer orderId;
+        private Reader reader (many-to-one relation)
         private LocalDateTime orderDate;
         private LocalDateTime readyAt;
         private LocalDateTime bookReturnDeadline;
-        private Book[] orderedBooks;
+        private Set<Book> orderedBooks;(one-to-many relation)
         private OrderStatus status;
-
 
 enum OrderStatus
 
@@ -62,30 +59,43 @@ enum OrderStatus
         OUT,
         RETURNED
 
+User Entities
+
+    There can be many different types of User. In this task given a case of Reader only.
 
 abstract User
 
       private Integer userId;
-      private FullName userFullName;
+      private String firstName;
+      private String lastName;
       private String userLogin;
       private String userEmail;
       private UserRole userRole;
 
+
 Reader extends User
 
-      private Address readerHomeAddress;
+      private Address readerHomeAddress; (nany-to-one relation)
       private LocalDate readerDateOfBirth;
       private String readerPhoneNumber;
-      private LocalDate readerDateOfRegestration;
+      private LocalDate readerDateOfRegistration;
+      private ReaderStatus status;
 
 
 enum UserRole
 
-      READER:...........;
+      READER;
+
+enum ReaderStatus
+
+      ACTIVE,
+      PAUSED,
+      DISABLED;
 
 Address
 
       private String streetName;
       private String houseNumber;
+      private String addressExtension
       private Integer postalIndex;
       private String city;

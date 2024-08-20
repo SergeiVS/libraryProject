@@ -32,12 +32,6 @@ Response:
 
         [
             {
-            "status":
-                        {
-                            "message":"OK",
-                            "code": "200"
-            },
-            {
              "id": 1,
             },
             {}
@@ -46,13 +40,7 @@ Response:
 
 find Book by id:
 
-Request:
-
-           [
-                {
-                    "id": "1"
-                }
-           ]
+Request: -
 
 Response:
 
@@ -72,7 +60,7 @@ Response:
                                                          "id": "1",
                                                          "firstName": "Robert",
                                                          "lastName": "Martin"
-                                                     }
+                                                     },
                                                      {}                                                                                                          }
                                        ]
                           "publisher":
@@ -80,7 +68,7 @@ Response:
                                                              "id": "1",
                                                              "name": "Prentice Hall"
                                                      }
-                          "subject": "Computer science"
+                          "subject": "computer_science"
                           "yearOfIssue": "2005",
                           "numberOfPages": "464",
                           "codeISBN": "978-0132350884",
