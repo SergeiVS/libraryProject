@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
+
 @Entity
 @Table(name = "author")
 @Data
@@ -18,5 +21,5 @@ public class Author {
     private String firstName;
     private String lastName;
     private String additionalInfo;
-    private String dateOfBirth;
+    private LocalDate dateOfBirth;
 }

@@ -1,19 +1,28 @@
 BooksRepositoryInterface
 
-    Book addOrUpdateBook(Book book);
+    Optional<Book> addOrUpdateBook(Book book);
     Book[] findAllBooks();
-    Book findBookById(Integer id);
+    Optional<Book> findBookById(Integer id);
     Book[] findBooksByTitle(String title);
     Book[] findBooksByAuthorId(Integer id);
     Book[] findBooksByStatus(BookStatus status);
     Book[] findBooksBySubjectId(Integer id);
     Book[] findBooksByAvailability(BookStatus status);
     Book[] findBooksByCodeISBN(String codeISBN);
+    Book[] findBooksByPublisherId(String id);
     Boolean deleteBookById(Integer id);
 
 AuthorsRepositoryInterface
 
-   Author addOrUpdateAuthor(Author newAuthor);
+   Optional<Author> addOrUpdateAuthor(Author newAuthor);
    Author[] findAllAuthors();
-   Author findAuthorById(Integer id);
+   Optional<Author> findAuthorById(Integer id);
    Author[] findAuthorsByName(String firstName, String lastName);
+
+SubjectsRepositoryInterface
+
+   Optional<Subject> addOrUpdateSubject(Subject newSubject);
+   Optional<Subject> findSubjectById(String id);
+   Subject[] findAllSubjects();
+   Optional<Subject> findSubjectByName(String name);
+   Boolean deleteSubjectById(Integer id);

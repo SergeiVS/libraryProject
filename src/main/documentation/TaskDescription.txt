@@ -1,7 +1,7 @@
 The Library Project
 
 This project is books and readers accounting(Reader side) application.
-It`s aim is create and manage a database of books in a library.
+Its aim is create and manage a database of books in a library.
 Create and save Book items in the database, receive and manage client's requests, and provide complete
 CRUD operations over Book objects.
 Enable books ordering and provide control over orders.
@@ -18,8 +18,9 @@ Operations with books
 5. Find Book(s) by subject
 6. Find Book(s) by availability
 7. Find Book by ISBN
-8. Update Book information
-9. Delete Book
+8. Find Book(s) by Publisher
+9. Update Book information
+10. Delete Book
 
 Operations with Authors
 
@@ -37,21 +38,24 @@ Operations with Publisher
 4. Find Publisher by id
 5. Find publishers by part of name (search by some known piece of publisher's name)
 
+Additional functionality
+
 Operations with User
 
 1. Add new User
-2. Update User data
-3. Find All Users
-4. Find User by id
-5. Find Users by firstname and lastname (lastname is required)
-6. Find Users by registration date (at some date, after some date, before some date, between some dates)
-7. Find Users by status;
+2. User login and logout
+3. Update User data
+4. Find All Users
+5. Find User by id
+6. Find Users by firstname and lastname (lastname is required)
+7. Find Users by registration date (at some date, after some date, before some date, between some dates)
+8. Find Users by status;
 
 
 Operations with Order
 
 1. Create new Order;
-2. Update Order Status;
+2. Update Order data;
 3. Find All Orders;
 4. Find Order by id;
 5. Find Orders by date (at some date, after some date, before some date, between some dates);

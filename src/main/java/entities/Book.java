@@ -5,12 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.security.auth.Subject;
 import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
-@Table(name = "books")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,7 +18,7 @@ public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer bookId;
-    private String mainTitle;
+    private String title;
     @ManyToMany
     @JoinTable(
             name = "books_authors",
@@ -29,7 +27,7 @@ public class Book {
     )
     private Set<Author> authors;
     @ManyToOne
-    @JoinColumn(name = "book_subject")
+    @JoinColumn(name = "subject_id")
     private BookSubject subject;
     private Integer publisherId;
     private LocalDate yearOfIssue;
