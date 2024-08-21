@@ -3,16 +3,18 @@ Minimal task:
 Book
 
       private Integer bookId;
-      private String mainTitle;
+      private String title;
       private Set<Author> authors;(many-to-many relation)
       private Subject subject;(many-to-one relation)
+      private BookStatus status;
+      <!*
       private Integer publisherId;(many-to-one relation)
       private LocalDate yearOfIssue;
       private Integer numberOfPages;
       private String codeISBN;
       private string descriptionURL;
       private String imageURL;
-      private BookStatus status;
+      *>
 
 Author
 
@@ -22,12 +24,12 @@ Author
       private String additionalInfo;
       private String dateOfBirth;
 
-Publisher
+<!* Publisher
 
        private String publisherID;
        private String publisherName;
        private String additionalInfo;
-
+/*>
 enum BookStatus
 
         AVAILABLE,
@@ -41,7 +43,7 @@ Subject
 
 
 Additional task
-
+<!*
 Order
 
         private Integer orderId;
@@ -99,3 +101,4 @@ Address
       private String addressExtension
       private Integer postalIndex;
       private String city;
+*>

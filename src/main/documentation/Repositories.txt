@@ -9,7 +9,9 @@ BooksRepositoryInterface
     Book[] findBooksBySubjectId(Integer id);
     Book[] findBooksByAvailability(BookStatus status);
     Book[] findBooksByCodeISBN(String codeISBN);
+    <!*
     Book[] findBooksByPublisherId(String id);
+    *>
     Boolean deleteBookById(Integer id);
 
 AuthorsRepositoryInterface

@@ -14,6 +14,5 @@ public class BookSubject {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String subject;
-    private String description;
 
 }

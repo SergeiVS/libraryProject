@@ -29,14 +29,7 @@ public class Book {
     @ManyToOne
     @JoinColumn(name = "subject_id")
     private BookSubject subject;
-    private Integer publisherId;
-    private LocalDate yearOfIssue;
-    private Integer numberOfPages;
     private String codeISBN;
-    private String descriptionURL;
-    private String imageURL;
     @Enumerated(EnumType.STRING)
     private BookStatus status;
-
-
 }
