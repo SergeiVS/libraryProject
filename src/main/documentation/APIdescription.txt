@@ -1,93 +1,17 @@
-Add new Book:
+addNewAuthor
 
 Request:
-        [
-            {
-                "mainTitle":"Clear code",
-                "authors":  [
-                                {
-                                    "id": "1",
-                                    "firstName": "Robert",
-                                    "lastName": "Martin"
-                                }
-                            ]
-                "publisher":
-                                {
-                                    "id": "1",
-                                    "name": "Prentice Hall"
-                                },
-                "subject": "Computer science"
-                "yearOfIssue": "2005",
-                "numberOfPages": "464",
-                "codeISBN": "978-0132350884",
-                "descriptionURL": "",
-                "imageURL": "",
-                "status": "AVAILABLE"
-            }
-            {}
-        ]
+
+    {
+        "firstName": "...",
+        "lastName":"..."
+    }
 
 Response:
 
-        [
-            {
-             "id": 1,
-             'mainTitle":"Clear code",
-                             "authors":  [
-                                             {
-                                                 "id": "1",
-                                                 "firstName": "Robert",
-                                                 "lastName": "Martin"
-                                             }
-                                         ]
-                             "publisher":
-                                             {
-                                                 "id": "1",
-                                                 "name": "Prentice Hall"
-                                             },
-                             "subject": "Computer science"
-                             "yearOfIssue": "2005",
-                             "numberOfPages": "464",
-                             "codeISBN": "978-0132350884",
-                             "descriptionURL": "",
-                             "imageURL": "",
-                             "status": "AVAILABLE"
-            },
-            {}
-        ]
+    {
+        "id": ...,
+        "firstName": "....",
+        "lastName": "...."
+    }
 
-
-find Book by id:
-
-Request: -
-
-Response:
-
-            [
-
-                        {
-                         "id": 1,
-                         "mainTitle":"Clear code",
-                          "authors":  [
-                                                     {
-                                                         "id": "1",
-                                                         "firstName": "Robert",
-                                                         "lastName": "Martin"
-                                                     },
-                                                     {}                                                                                                          }
-                                       ]
-                          "publisher":
-                                                     {
-                                                             "id": "1",
-                                                             "name": "Prentice Hall"
-                                                     }
-                          "subject": "computer_science"
-                          "yearOfIssue": "2005",
-                          "numberOfPages": "464",
-                          "codeISBN": "978-0132350884",
-                          "descriptionURL": "",
-                          "imageURL": "",
-                          "status": "AVAILABLE"
-                     },
-                     {}
-                    ]

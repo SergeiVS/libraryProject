@@ -1,4 +1,4 @@
-package entities;
+package org.libraryaccountingproject.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
