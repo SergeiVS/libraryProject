@@ -7,17 +7,42 @@ import org.libraryaccountingproject.repositories.BooksSubjectsRepository;
 import org.libraryaccountingproject.services.utils.converters.SubjectToDtoConverter;
 import org.springframework.stereotype.Service;
 
+import javax.security.auth.Subject;
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class SubjectServices {
 
-   private final BooksSubjectsRepository repository;
-   private final SubjectToDtoConverter converter;
+    private final BooksSubjectsRepository repository;
+    private final SubjectToDtoConverter converter;
 
-   public SubjectResponseDto addNewSubject(String subject) {
-       BookSubject bookSubject = new BookSubject();
-       bookSubject.setSubject(subject);
-       BookSubject savedSubject= repository.save(bookSubject);
-       return converter.convertSubjectToSubjectDto(savedSubject);
-   }
+    public SubjectResponseDto addNewSubject(String subject) {
+        BookSubject bookSubject = new BookSubject();
+        bookSubject.setSubject(subject);
+        BookSubject savedSubject = repository.save(bookSubject);
+        return converter.convertSubjectToSubjectDto(savedSubject);
+    }
+
+    public BookSubject findSubjectByName(String subject) {
+        if (repository.findByName(subject).isPresent()) {
+            return repository.findByName(subject).get();
+        } else {
+            throw new RuntimeException("Subject " + subject + " not found");
+        }
+    }
+
+    public List<SubjectResponseDto> findAllSubjects() {
+
+        List<BookSubject> subjects = repository.findAll();
+
+        List<SubjectResponseDto> responseDtos = new ArrayList<>();
+        subjects.forEach(subject -> {
+            responseDtos.add(converter.convertSubjectToSubjectDto(subject));
+        });
+        return responseDtos;
+    }
+
+
 }

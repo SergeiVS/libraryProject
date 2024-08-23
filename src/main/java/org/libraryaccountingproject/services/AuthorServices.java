@@ -20,24 +20,40 @@ public class AuthorServices {
     private final AuthorDtoToAuthorConverter dtoToAuthorConverter;
 
     public AuthorDataResponseDto addAuthor(AddAuthorRequestDto authorDto) {
+
+        if (this.authorsRepository.findByFullname(authorDto.getFirstName(), authorDto.getLastName()).isEmpty()) {
+
+            Optional<Author> savedAuthor = getSavedAuthor(authorDto);
+
+            if (savedAuthor.isPresent()) {
+                return dtoToAuthorConverter.authorToAuthorResponseDto(savedAuthor.get());
+            } else {
+                throw new RuntimeException("Author should not be saved" + this.getClass().getName());
+
+            }
+        } else {
+            throw new RuntimeException("Author with such name is already present.");
+        }
+
+    }
+
+    private Optional<Author> getSavedAuthor(AddAuthorRequestDto authorDto) {
+
         Author author = new Author();
         author.setFirstName(authorDto.getFirstName());
         author.setLastName(authorDto.getLastName());
-        Optional<Author> savedAuthor = Optional.of(authorsRepository.save(author));
-        if (savedAuthor.isPresent()) {
-            return dtoToAuthorConverter.authorToAuthorResponseDto(savedAuthor.get());
-        } else {
-            throw new RuntimeException("Author should not be saved" + this.getClass().getName());
 
-        }
+        Optional<Author> savedAuthor = Optional.of(authorsRepository.save(author));
+
+        return savedAuthor;
     }
 
-    public Author findAuthorById(Integer id) {
+    public AuthorDataResponseDto findAuthorById(Integer id) {
         Optional<Author> author = authorsRepository.findById(Long.valueOf(id));
         if (author.isPresent()) {
-            return author.get();
+            return dtoToAuthorConverter.authorToAuthorResponseDto(author.get());
         } else {
-            throw new RuntimeException("Author should not be found" + this.getClass().getName());
+            throw new RuntimeException("Author should not be found");
         }
 
     }
@@ -48,4 +64,29 @@ public class AuthorServices {
         authors.forEach(author -> dtos.add(dtoToAuthorConverter.authorToAuthorResponseDto(author)));
         return dtos;
     }
+
+    public AuthorDataResponseDto findAuthorsByFullname(String firstName, String lastName) {
+
+        Optional<Author> foundAuthor = authorsRepository.findByFullname(firstName, lastName);
+
+        if (foundAuthor.isPresent()) {
+            return dtoToAuthorConverter.authorToAuthorResponseDto(foundAuthor.get());
+        } else {
+            throw new RuntimeException("Author with name: " + firstName + " " + lastName + " was not found");
+        }
+
+    }
+    public Author findAuthorEntityById(Integer id) {
+
+        Optional<Author> foundAuthor = authorsRepository.findById(Long.valueOf(id));
+
+        if (foundAuthor.isPresent()) {
+            return foundAuthor.get();
+        } else {
+            throw new RuntimeException("Author with name: " + id + " was not found");
+        }
+
+    }
+
+
 }

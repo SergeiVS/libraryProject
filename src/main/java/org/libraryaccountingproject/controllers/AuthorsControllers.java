@@ -24,4 +24,14 @@ public class AuthorsControllers {
     public List<AuthorDataResponseDto> getAllAuthors() {
        return authorServices.findAllAuthors();
     }
+
+    @GetMapping("/{id}")
+    public AuthorDataResponseDto getAuthorById(@PathVariable Integer id) {
+        return authorServices.findAuthorById(id);
+    }
+
+    @GetMapping("/{firstName}-{lastName}")
+    public AuthorDataResponseDto getAuthorByFullName(@PathVariable String firstName, @PathVariable String lastName) {
+        return authorServices.findAuthorsByFullname(firstName, lastName);
+    }
 }

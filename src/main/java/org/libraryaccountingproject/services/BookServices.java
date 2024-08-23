@@ -11,6 +11,7 @@ import org.libraryaccountingproject.repositories.BooksRepository;
 import org.libraryaccountingproject.services.utils.converters.AuthorDtoToAuthorConverter;
 import org.libraryaccountingproject.services.utils.converters.BookToBookDtoConverter;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.*;
 
@@ -19,11 +20,13 @@ import java.util.*;
 public class BookServices {
     private final BooksRepository booksRepository;
     private final AuthorServices authorServices;
+    private final SubjectServices subjectServices;
     private final BookToBookDtoConverter bookToBookDtoConverter;
     private final AuthorDtoToAuthorConverter dtoToAuthorConverter;
 
     public BookResponseDto addBook(AddBookRequestDto bookDto) {
-        Book newBook = bookToBookDtoConverter.convertBookRequestDtoToBook(bookDto);
+
+        Book newBook = bookToBookDtoConverter.convertBookRequestDtoToBook(bookDto, subjectServices);
         newBook.setStatus(BookStatus.AVAILABLE);
         newBook.setAuthors(getAuthorsSet(bookDto));
         Optional<Book> savedBook = Optional.of(booksRepository.save(newBook));
@@ -32,9 +35,7 @@ public class BookServices {
 
             Book updatedBook = savedBook.get();
 
-            List<AuthorDataResponseDto> authors = getAuthorDataResponseDtos(updatedBook);
-
-            return bookToBookDtoConverter.convertBookToAddBookResponseDto(updatedBook, authors);
+            return bookToBookDtoConverter.convertBookToAddBookResponseDto(updatedBook, dtoToAuthorConverter);
 
         } else {
             throw new RuntimeException("Book could not be saved" + this.getClass().getName());
@@ -47,27 +48,44 @@ public class BookServices {
         List<BookResponseDto> bookResponseDtos = new ArrayList<>();
 
         books.forEach(book -> {
-            List<AuthorDataResponseDto> authors = getAuthorDataResponseDtos(book);
-            bookResponseDtos.add(bookToBookDtoConverter.convertBookToAddBookResponseDto(book, authors));
+            bookResponseDtos.add(bookToBookDtoConverter.convertBookToAddBookResponseDto(book, dtoToAuthorConverter));
         });
         return bookResponseDtos;
     }
 
-    private List<AuthorDataResponseDto> getAuthorDataResponseDtos(Book updatedBook) {
-        List<AuthorDataResponseDto> authors = new ArrayList<>();
-        updatedBook.getAuthors()
-                .forEach(author -> {
-                    AuthorDataResponseDto authorDto = dtoToAuthorConverter.authorToAuthorResponseDto(author);
-                    authors.add(authorDto);
-                });
-        return authors;
+    public BookResponseDto findBookById(Integer id) {
+        Optional<Book> foundBook = booksRepository.findById(Long.valueOf(id));
+        if (foundBook.isPresent()) {
+
+            return bookToBookDtoConverter.convertBookToAddBookResponseDto(foundBook.get(), dtoToAuthorConverter);
+        } else {
+            throw new RuntimeException("Book could not be found");
+        }
     }
+
+    ;
+
+    public List<BookResponseDto> findBookByTitle(String title) {
+        List<Book> foundBooks = booksRepository.findByTitle(title);
+        if (!foundBooks.isEmpty()) {
+
+            List<BookResponseDto> bookDtos = new ArrayList<>();
+            foundBooks.forEach(book -> {
+                BookResponseDto dto = bookToBookDtoConverter.convertBookToAddBookResponseDto(book, dtoToAuthorConverter);
+                bookDtos.add(dto);
+            });
+            return bookDtos;
+        } else {
+            throw new RuntimeException("Book could not be found");
+        }
+    }
+
 
     private Set<Author> getAuthorsSet(AddBookRequestDto bookDto) {
         Set<Author> authors = new HashSet<>();
         bookDto.getAuthorsIds()
                 .forEach(bookId -> {
-                    authors.add(authorServices.findAuthorById(bookId));
+                    authors.add(authorServices.findAuthorEntityById(bookId));
                 });
         return authors;
     }

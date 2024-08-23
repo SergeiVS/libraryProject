@@ -15,6 +15,6 @@ public class AddBookRequestDto {
     private String bookTitle;
     private List<Integer> authorsIds;
     private String codeISBN;
-    private BookSubject bookSubject;
+    private String bookSubject;
 
 }
