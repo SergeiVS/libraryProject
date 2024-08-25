@@ -23,7 +23,13 @@
 
         <insert tableName="book_subject">
             <column name="subject" value="Computer sience"/>
+        </insert>
+
+        <insert tableName="book_subject">
             <column name="subject" value="Classics"/>
+        </insert>
+
+        <insert tableName="book_subject">
             <column name="subject" value="Romans"/>
         </insert>
 

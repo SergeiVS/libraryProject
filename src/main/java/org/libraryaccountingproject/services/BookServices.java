@@ -36,7 +36,7 @@ public class BookServices {
             return bookToBookDtoConverter.convertBookToAddBookResponseDto(updatedBook, dtoToAuthorConverter);
 
         } else {
-            throw new RuntimeException("Book could not be saved" + this.getClass().getName());
+            throw new RuntimeException("Book could not be saved");
         }
     }
 

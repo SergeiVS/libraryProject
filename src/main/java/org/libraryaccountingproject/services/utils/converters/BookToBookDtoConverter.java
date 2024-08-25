@@ -22,7 +22,7 @@ public class BookToBookDtoConverter {
     public Book convertBookRequestDtoToBook(AddBookRequestDto bookDto, SubjectServices subjectServices) {
         Book book = new Book();
         book.setTitle(bookDto.getBookTitle());
-        book.setSubject(subjectServices.findSubjectByName(bookDto.getBookSubject()));
+        book.setSubject(subjectServices.findSubjectObjectByName(bookDto.getBookSubject()));
         book.setCodeISBN(bookDto.getCodeISBN());
         return book;
     }
