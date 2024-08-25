@@ -71,6 +71,7 @@ abstract User
       private String firstName;
       private String lastName;
       private String userLogin;
+      private String password;
       private String userEmail;
       private UserRole userRole;
 

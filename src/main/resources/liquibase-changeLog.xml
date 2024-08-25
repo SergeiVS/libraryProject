@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="create-book-subject-table" author="sergei_vs">
+
+        <createTable tableName="book_subject">
+
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="subject" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+    </changeSet>
+
+    <changeSet id="fill-default-values-into-book=subject-table" author="sergei_vs">
+
+        <insert tableName="book_subject">
+            <column name="subject" value="Computer sience"/>
+            <column name="subject" value="Classics"/>
+            <column name="subject" value="Romans"/>
+        </insert>
+
+    </changeSet>
+
+    <changeSet id="create-user-role-table" author="sergei_vs">
+        <createTable tableName="user_role">
+
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="role_name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+    </changeSet>
+
+    <changeSet id="fill-user-role-table-with-default-values" author="sergei_vs">
+
+        <insert tableName="user_role">
+            <column name="role_name" value="ADMIN"/>
+        </insert>
+
+        <insert tableName="user_role">
+            <column name="role_name" value="READER"/>
+        </insert>
+
+        <insert tableName="user_role">
+            <column name="role_name" value="LIBRARIAN"/>
+        </insert>
+
+    </changeSet>
+
+    <changeSet id="create-users-table" author="sergei_vs">
+        <createTable tableName="user">
+            <column name="user_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="first_name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_login" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_email" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role_id" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="fill-user-table-with-default-values" author="sergei_vs">
+        <insert tableName="user">
+            <column name="first_name" value="John"/>
+            <column name="last_name" value="Doe"/>
+            <column name="user_login" value="JohnDoe"/>
+            <column name="password" value="John123Doe"/>
+            <column name="user_email" value="j.doe@company.com"/>
+            <column name="role_id" value="1"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

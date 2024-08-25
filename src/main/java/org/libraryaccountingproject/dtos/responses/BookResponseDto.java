@@ -19,7 +19,7 @@ public class BookResponseDto {
     private String bookTitle;
     private List<AuthorDataResponseDto> authors;
     private String codeISBN;
-    private BookSubject bookSubject;
+    private String bookSubject;
     private BookStatus bookStatus;
 
 

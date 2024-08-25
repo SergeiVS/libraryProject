@@ -2,7 +2,6 @@ package org.libraryaccountingproject.services;
 
 import lombok.RequiredArgsConstructor;
 import org.libraryaccountingproject.dtos.requests.AddBookRequestDto;
-import org.libraryaccountingproject.dtos.responses.AuthorDataResponseDto;
 import org.libraryaccountingproject.dtos.responses.BookResponseDto;
 import org.libraryaccountingproject.entities.Author;
 import org.libraryaccountingproject.entities.BookStatus;
@@ -11,7 +10,6 @@ import org.libraryaccountingproject.repositories.BooksRepository;
 import org.libraryaccountingproject.services.utils.converters.AuthorDtoToAuthorConverter;
 import org.libraryaccountingproject.services.utils.converters.BookToBookDtoConverter;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.*;
 
@@ -25,7 +23,7 @@ public class BookServices {
     private final AuthorDtoToAuthorConverter dtoToAuthorConverter;
 
     public BookResponseDto addBook(AddBookRequestDto bookDto) {
-
+//add validation by odeISBN
         Book newBook = bookToBookDtoConverter.convertBookRequestDtoToBook(bookDto, subjectServices);
         newBook.setStatus(BookStatus.AVAILABLE);
         newBook.setAuthors(getAuthorsSet(bookDto));

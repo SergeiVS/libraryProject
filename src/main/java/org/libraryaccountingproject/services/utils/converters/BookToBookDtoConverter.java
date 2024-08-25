@@ -32,8 +32,8 @@ public class BookToBookDtoConverter {
         Integer id = book.getBookId();
         String bookTitle = book.getTitle();
         String codeISBN = book.getCodeISBN();
-        List<AuthorDataResponseDto> authors = getAuthorDataResponseDtos(book, converter).
-        BookSubject subject = book.getSubject();
+        List<AuthorDataResponseDto> authors = getAuthorDataResponseDtos(book, converter);
+        String subject = book.getSubject().getSubject();
         BookStatus status = book.getStatus();
 
         return new BookResponseDto(id, bookTitle, authors, codeISBN, subject, status);
@@ -41,7 +41,7 @@ public class BookToBookDtoConverter {
 
     private List<AuthorDataResponseDto> getAuthorDataResponseDtos(Book book, AuthorDtoToAuthorConverter converter) {
         List<AuthorDataResponseDto> authors = new ArrayList<>();
-        bookook.getAuthors()
+        book.getAuthors()
                 .forEach(author -> {
                     AuthorDataResponseDto authorDto = converter.authorToAuthorResponseDto(author);
                     authors.add(authorDto);

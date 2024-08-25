@@ -30,7 +30,8 @@ public class BookControllers {
     }
 
     @GetMapping("/{id}")
-    public List<BookResponseDto> getBookById(@PathVariable int id) {
+    public BookResponseDto getBookById(@PathVariable int id) {
+
         return bookServices.findBookById(id);
     }
 

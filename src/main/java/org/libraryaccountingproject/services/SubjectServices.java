@@ -7,7 +7,6 @@ import org.libraryaccountingproject.repositories.BooksSubjectsRepository;
 import org.libraryaccountingproject.services.utils.converters.SubjectToDtoConverter;
 import org.springframework.stereotype.Service;
 
-import javax.security.auth.Subject;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,8 +25,8 @@ public class SubjectServices {
     }
 
     public BookSubject findSubjectByName(String subject) {
-        if (repository.findByName(subject).isPresent()) {
-            return repository.findByName(subject).get();
+        if (repository.findBySubject(subject).isPresent()) {
+            return repository.findBySubject(subject).get();
         } else {
             throw new RuntimeException("Subject " + subject + " not found");
         }

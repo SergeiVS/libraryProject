@@ -32,6 +32,6 @@ public class AuthorsControllers {
 
     @GetMapping("/{firstName}-{lastName}")
     public AuthorDataResponseDto getAuthorByFullName(@PathVariable String firstName, @PathVariable String lastName) {
-        return authorServices.findAuthorsByFullname(firstName, lastName);
+        return authorServices.findAuthorByFullname(firstName, lastName);
     }
 }

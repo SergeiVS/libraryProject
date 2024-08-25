@@ -21,7 +21,7 @@ public class AuthorServices {
 
     public AuthorDataResponseDto addAuthor(AddAuthorRequestDto authorDto) {
 
-        if (this.authorsRepository.findByFullname(authorDto.getFirstName(), authorDto.getLastName()).isEmpty()) {
+        if (this.authorsRepository.findByFirstNameAndLastName(authorDto.getFirstName(), authorDto.getLastName()).isEmpty()) {
 
             Optional<Author> savedAuthor = getSavedAuthor(authorDto);
 
@@ -65,9 +65,9 @@ public class AuthorServices {
         return dtos;
     }
 
-    public AuthorDataResponseDto findAuthorsByFullname(String firstName, String lastName) {
+    public AuthorDataResponseDto findAuthorByFullname(String firstName, String lastName) {
 
-        Optional<Author> foundAuthor = authorsRepository.findByFullname(firstName, lastName);
+        Optional<Author> foundAuthor = authorsRepository.findByFirstNameAndLastName(firstName, lastName);
 
         if (foundAuthor.isPresent()) {
             return dtoToAuthorConverter.authorToAuthorResponseDto(foundAuthor.get());
@@ -76,6 +76,7 @@ public class AuthorServices {
         }
 
     }
+
     public Author findAuthorEntityById(Integer id) {
 
         Optional<Author> foundAuthor = authorsRepository.findById(Long.valueOf(id));
