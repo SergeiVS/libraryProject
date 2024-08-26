@@ -37,4 +37,10 @@ public class BookControllers {
         return new ResponseEntity<>(bookServices.findBookById(id), HttpStatus.FOUND) ;
     }
 
+    @GetMapping("/find-by-title")
+
+    private ResponseEntity<List<BookResponseDto>> getBooksByPartTitle(@RequestParam String partTitle){
+        return new ResponseEntity<>(bookServices.findBookByPartTitle(partTitle), HttpStatus.FOUND);
+    }
+
 }

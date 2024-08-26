@@ -19,6 +19,7 @@ public class AuthorsControllers {
 
     @PostMapping("/add-author")
     public ResponseEntity<AuthorDataResponseDto> addAuthor(@RequestBody AddAuthorRequestDto authorDto) {
+
         return new ResponseEntity<>(authorServices.addAuthor(authorDto), HttpStatus.CREATED);
     }
 
@@ -32,8 +33,8 @@ public class AuthorsControllers {
         return new ResponseEntity<>(authorServices.findAuthorById(id),HttpStatus.FOUND);
     }
 
-    @GetMapping("/{firstName}-{lastName}")
-    public ResponseEntity<AuthorDataResponseDto> getAuthorByFullName(@PathVariable String firstName, @PathVariable String lastName) {
+    @GetMapping("/find-by-name")
+    public ResponseEntity<AuthorDataResponseDto> getAuthorByFullName(@RequestParam String firstName, @RequestParam String lastName) {
         return new ResponseEntity<>(authorServices.findAuthorByFullname(firstName, lastName), HttpStatus.FOUND) ;
     }
 }

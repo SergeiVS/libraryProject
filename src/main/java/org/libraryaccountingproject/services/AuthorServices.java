@@ -61,7 +61,7 @@ public class AuthorServices {
     public List<AuthorDataResponseDto> findAllAuthors() {
 
         List<Author> authors = authorsRepository.findAll();
-        if (authors.isEmpty()) {
+        if (!authors.isEmpty()) {
             List<AuthorDataResponseDto> dtos = new ArrayList<>();
 
             authors.forEach(author -> dtos.add(dtoToAuthorConverter.authorToAuthorResponseDto(author)));

@@ -10,5 +10,9 @@ import java.util.Optional;
 @Repository
 public interface BooksRepository extends JpaRepository<Book, Long> {
 
-public List<Book> findByTitle(String title);
+public default List<Book> findByPartTitle(String partTitle){
+return findAll().stream()
+        .filter(book -> book.getTitle().toLowerCase().contains(partTitle))
+        .toList();
+};
 }

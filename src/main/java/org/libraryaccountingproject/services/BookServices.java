@@ -7,6 +7,7 @@ import org.libraryaccountingproject.entities.Author;
 import org.libraryaccountingproject.entities.BookStatus;
 import org.libraryaccountingproject.entities.Book;
 import org.libraryaccountingproject.repositories.BooksRepository;
+import org.libraryaccountingproject.services.exeptions.NotFoundException;
 import org.libraryaccountingproject.services.utils.converters.AuthorDtoToAuthorConverter;
 import org.libraryaccountingproject.services.utils.converters.BookToBookDtoConverter;
 import org.springframework.stereotype.Service;
@@ -43,39 +44,40 @@ public class BookServices {
     public List<BookResponseDto> findAllBooks() {
 
         List<Book> books = booksRepository.findAll();
-        List<BookResponseDto> bookResponseDtos = new ArrayList<>();
-
-        books.forEach(book -> {
-            bookResponseDtos.add(bookToBookDtoConverter.convertBookToAddBookResponseDto(book, dtoToAuthorConverter));
-        });
+        List<BookResponseDto> bookResponseDtos = getBookResponseDtosFromBooksList(books);
         return bookResponseDtos;
     }
 
     public BookResponseDto findBookById(Integer id) {
         Optional<Book> foundBook = booksRepository.findById(Long.valueOf(id));
-        if (foundBook.isPresent()) {
 
+        if (foundBook.isPresent()) {
             return bookToBookDtoConverter.convertBookToAddBookResponseDto(foundBook.get(), dtoToAuthorConverter);
         } else {
-            throw new RuntimeException("Book could not be found");
+            throw new NotFoundException("Book could not be found");
         }
     }
 
     ;
 
-    public List<BookResponseDto> findBookByTitle(String title) {
-        List<Book> foundBooks = booksRepository.findByTitle(title);
+    public List<BookResponseDto> findBookByPartTitle(String title) {
+        List<Book> foundBooks = booksRepository.findByPartTitle(title);
         if (!foundBooks.isEmpty()) {
-
-            List<BookResponseDto> bookDtos = new ArrayList<>();
-            foundBooks.forEach(book -> {
-                BookResponseDto dto = bookToBookDtoConverter.convertBookToAddBookResponseDto(book, dtoToAuthorConverter);
-                bookDtos.add(dto);
-            });
+            List<BookResponseDto> bookDtos = getBookResponseDtosFromBooksList(foundBooks);
             return bookDtos;
         } else {
-            throw new RuntimeException("Book could not be found");
+            throw new NotFoundException("Book could not be found");
         }
+    }
+
+    private List<BookResponseDto> getBookResponseDtosFromBooksList(List<Book> foundBooks) {
+        List<BookResponseDto> bookDtos = new ArrayList<>();
+
+        foundBooks.forEach(book -> {
+            BookResponseDto dto = bookToBookDtoConverter.convertBookToAddBookResponseDto(book, dtoToAuthorConverter);
+            bookDtos.add(dto);
+        });
+        return bookDtos;
     }
 
 
