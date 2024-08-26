@@ -1,5 +1,6 @@
 package org.libraryaccountingproject.services;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.libraryaccountingproject.dtos.requests.AddAuthorRequestDto;
 import org.libraryaccountingproject.dtos.responses.AuthorDataResponseDto;
@@ -23,6 +24,7 @@ public class AuthorServices {
     private final AuthorsRepository authorsRepository;
     private final AuthorDtoToAuthorConverter dtoToAuthorConverter;
 
+    @Transactional
     public AuthorDataResponseDto addAuthor(AddAuthorRequestDto authorDto) {
 
         if (this.authorsRepository.findByFirstNameAndLastName(authorDto.getFirstName(), authorDto.getLastName()).isEmpty()) {

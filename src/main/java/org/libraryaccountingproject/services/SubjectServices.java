@@ -1,5 +1,6 @@
 package org.libraryaccountingproject.services;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.libraryaccountingproject.dtos.responses.SubjectResponseDto;
 import org.libraryaccountingproject.entities.BookSubject;
@@ -19,6 +20,7 @@ public class SubjectServices {
     private final BooksSubjectsRepository repository;
     private final SubjectToDtoConverter converter;
 
+    @Transactional
     public SubjectResponseDto addNewSubject(String subject) {
 
         BookSubject bookSubject = new BookSubject();

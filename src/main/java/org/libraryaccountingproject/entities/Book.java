@@ -1,5 +1,6 @@
 package org.libraryaccountingproject.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,6 +25,7 @@ public class Book {
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id")
     )
+    @JsonBackReference
     private Set<Author> authors;
     @ManyToOne
     @JoinColumn(name = "subject_id")

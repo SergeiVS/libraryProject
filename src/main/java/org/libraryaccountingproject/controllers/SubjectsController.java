@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("api/subjects")
 @RequiredArgsConstructor
@@ -21,6 +23,11 @@ public class SubjectsController {
     @GetMapping("/add-subject")
     public ResponseEntity<SubjectResponseDto> addNewSubject(@RequestParam String subject) {
         return new ResponseEntity<>(subjectServices.addNewSubject(subject), HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<SubjectResponseDto>> getAllSubjects() {
+        return new ResponseEntity<>(subjectServices.findAllSubjects(), HttpStatus.FOUND);
     }
 
 }

@@ -1,5 +1,6 @@
 package org.libraryaccountingproject.services;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.libraryaccountingproject.dtos.requests.AddBookRequestDto;
 import org.libraryaccountingproject.dtos.responses.BookResponseDto;
@@ -23,6 +24,7 @@ public class BookServices {
     private final BookToBookDtoConverter bookToBookDtoConverter;
     private final AuthorDtoToAuthorConverter dtoToAuthorConverter;
 
+    @Transactional
     public BookResponseDto addBook(AddBookRequestDto bookDto) {
 //add validation by odeISBN
         Book newBook = bookToBookDtoConverter.convertBookRequestDtoToBook(bookDto, subjectServices);

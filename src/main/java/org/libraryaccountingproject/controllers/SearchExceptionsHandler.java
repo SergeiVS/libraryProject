@@ -12,22 +12,23 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class SearchExceptionsHandler {
 
-    @ExceptionHandler
+    @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<String> handlerNotFoundException(NotFoundException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(AlreadyExistException.class)
     public ResponseEntity<String> handlerAlreadyExistException(AlreadyExistException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(NotCreatedException.class)
     public ResponseEntity<String> handlerNotCreatedException(NotCreatedException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(NullPointerException.class)
     public ResponseEntity<String> handlerNullPointerException(NullPointerException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
