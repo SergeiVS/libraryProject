@@ -15,4 +15,10 @@ return findAll().stream()
         .filter(book -> book.getTitle().toLowerCase().contains(partTitle))
         .toList();
 };
+
+public default List<Book> findBySubjectName(String subjectName){
+    return findAll().stream()
+            .filter(book -> book.getSubject().getSubject().toLowerCase().equals(subjectName))
+            .toList();
+}
 }

@@ -10,5 +10,11 @@ import java.util.Optional;
 @Repository
 public interface BooksSubjectsRepository extends JpaRepository<BookSubject, Long> {
 
-    public Optional<BookSubject> findBySubject(String subject);
+    public default Optional<BookSubject> findBySubject(String subject) {
+        return findAll().stream()
+                .filter(objectSubject -> objectSubject.getSubject().toLowerCase().equals(subject))
+                .findFirst();
+    }
+
+    ;
 }

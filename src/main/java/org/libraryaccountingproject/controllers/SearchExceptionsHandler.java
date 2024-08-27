@@ -4,10 +4,12 @@ import org.libraryaccountingproject.services.exeptions.AlreadyExistException;
 import org.libraryaccountingproject.services.exeptions.NotCreatedException;
 import org.libraryaccountingproject.services.exeptions.NotFoundException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import java.lang.reflect.Field;
+import java.sql.SQLIntegrityConstraintViolationException;
 
 @ControllerAdvice
 public class SearchExceptionsHandler {
@@ -32,4 +34,6 @@ public class SearchExceptionsHandler {
     public ResponseEntity<String> handlerNullPointerException(NullPointerException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+
 }

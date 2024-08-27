@@ -12,6 +12,7 @@ public class AddAuthorRequestDto {
     @NotBlank(message = "Firstname could not be empty")
     @Size(min = 3, max = 25, message = "Firstname length could be between 3 and 25 characters" )
     private String firstName;
+
     @NotBlank(message = "Lastname could not be empty")
     @Size(min = 3, max = 25, message = "Lastname length could be between 3 and 25 characters" )
     private String lastName;

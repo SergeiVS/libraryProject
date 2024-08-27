@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.ISBN;
 
 import java.util.Set;
 
@@ -21,8 +22,10 @@ public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer bookId;
+
     @NotBlank(message = "Book title could not be empty")
     private String title;
+
     @ManyToMany
     @JoinTable(
             name = "books_authors",
@@ -31,14 +34,17 @@ public class Book {
     )
     @JsonBackReference
     private Set<Author> authors;
+
     @ManyToOne
     @JoinColumn(name = "subject_id")
     @JsonBackReference
     private BookSubject subject;
+
     @NotBlank(message = "ISBN could not be empty")
-    @Size(min = 13, message = "ISBN could not be shorter as 13 digits")
-    @Pattern(regexp = "^[0-9]-+ $")
+    @Size(min = 10, message = "ISBN could not be shorter as 10 digits")
+    @ISBN(message = "ISBN must be in proper format")
     private String codeISBN;
+
     @Enumerated(EnumType.STRING)
     private BookStatus status;
 }

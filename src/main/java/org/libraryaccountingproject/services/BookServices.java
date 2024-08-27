@@ -8,6 +8,7 @@ import org.libraryaccountingproject.entities.Author;
 import org.libraryaccountingproject.entities.BookStatus;
 import org.libraryaccountingproject.entities.Book;
 import org.libraryaccountingproject.repositories.BooksRepository;
+import org.libraryaccountingproject.services.exeptions.NotCreatedException;
 import org.libraryaccountingproject.services.exeptions.NotFoundException;
 import org.libraryaccountingproject.services.utils.converters.AuthorDtoToAuthorConverter;
 import org.libraryaccountingproject.services.utils.converters.BookToBookDtoConverter;
@@ -26,7 +27,9 @@ public class BookServices {
 
     @Transactional
     public BookResponseDto addBook(AddBookRequestDto bookDto) {
-//add validation by odeISBN
+
+        checkSubjectIsPresent(bookDto.getBookSubject());
+
         Book newBook = bookToBookDtoConverter.convertBookRequestDtoToBook(bookDto, subjectServices);
         newBook.setStatus(BookStatus.AVAILABLE);
         newBook.setAuthors(getAuthorsSet(bookDto));
@@ -39,9 +42,10 @@ public class BookServices {
             return bookToBookDtoConverter.convertBookToAddBookResponseDto(updatedBook, dtoToAuthorConverter);
 
         } else {
-            throw new RuntimeException("Book could not be saved");
+            throw new NotCreatedException("Book could not be saved");
         }
     }
+
 
     public List<BookResponseDto> findAllBooks() {
 
@@ -63,12 +67,38 @@ public class BookServices {
     ;
 
     public List<BookResponseDto> findBookByPartTitle(String title) {
+
         List<Book> foundBooks = booksRepository.findByPartTitle(title);
+
+        return getBookResponseDtoList(foundBooks);
+    }
+
+
+
+    public List<BookResponseDto> findBookBySubjectName(String subjectName) {
+
+        checkSubjectIsPresent(subjectName);
+
+        List<Book> foundBooks = booksRepository.findBySubjectName(subjectName);
+
+        return getBookResponseDtoList(foundBooks);
+
+    }
+
+// Private service methods
+
+    private List<BookResponseDto> getBookResponseDtoList(List<Book> foundBooks) {
         if (!foundBooks.isEmpty()) {
             List<BookResponseDto> bookDtos = getBookResponseDtosFromBooksList(foundBooks);
             return bookDtos;
         } else {
             throw new NotFoundException("Book could not be found");
+        }
+    }
+
+    private void checkSubjectIsPresent(String subjectName) {
+        if (subjectServices.findSubjectByName(subjectName) == null) {
+            throw new NotCreatedException("Subject not found, please insert one from preset subjects list");
         }
     }
 
