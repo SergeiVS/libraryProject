@@ -1,5 +1,6 @@
 package org.libraryaccountingproject.controllers;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.libraryaccountingproject.dtos.requests.AddAuthorRequestDto;
 import org.libraryaccountingproject.dtos.responses.AuthorDataResponseDto;
@@ -18,7 +19,7 @@ public class AuthorsControllers {
     private final AuthorServices authorServices;
 
     @PostMapping("/add-author")
-    public ResponseEntity<AuthorDataResponseDto> addAuthor(@RequestBody AddAuthorRequestDto authorDto) {
+    public ResponseEntity<AuthorDataResponseDto> addAuthor(@Valid @RequestBody AddAuthorRequestDto authorDto) {
 
         return new ResponseEntity<>(authorServices.addAuthor(authorDto), HttpStatus.CREATED);
     }
@@ -33,8 +34,13 @@ public class AuthorsControllers {
         return new ResponseEntity<>(authorServices.findAuthorById(id),HttpStatus.FOUND);
     }
 
-    @GetMapping("/find-by-name")
+    @GetMapping("/find-by-fullname")
     public ResponseEntity<AuthorDataResponseDto> getAuthorByFullName(@RequestParam String firstName, @RequestParam String lastName) {
         return new ResponseEntity<>(authorServices.findAuthorByFullname(firstName, lastName), HttpStatus.FOUND) ;
+    }
+
+    @GetMapping("/find-by-lastname")
+    public ResponseEntity<List<AuthorDataResponseDto>> getAuthorByLastName(@RequestParam String lastName) {
+        return new ResponseEntity<>(authorServices.findAuthorsByLastName(lastName), HttpStatus.FOUND);
     }
 }

@@ -1,6 +1,9 @@
 package org.libraryaccountingproject.services;
 
+import annotations.NameFormatValidation;
+import annotations.StringFormatValidation;
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.libraryaccountingproject.dtos.requests.AddAuthorRequestDto;
 import org.libraryaccountingproject.dtos.responses.AuthorDataResponseDto;
@@ -36,8 +39,8 @@ public class AuthorServices {
                 return dtoToAuthorConverter.authorToAuthorResponseDto(savedAuthor.get());
 
             } else {
-                throw new NotCreatedException("Author could not be created");
 
+                throw new NotCreatedException("Author could not be created");
             }
         } else {
             throw new AlreadyExistException("Author already exists");
@@ -63,26 +66,44 @@ public class AuthorServices {
     public List<AuthorDataResponseDto> findAllAuthors() {
 
         List<Author> authors = authorsRepository.findAll();
+
         if (!authors.isEmpty()) {
-            List<AuthorDataResponseDto> dtos = new ArrayList<>();
 
-            authors.forEach(author -> dtos.add(dtoToAuthorConverter.authorToAuthorResponseDto(author)));
+            return getAuthorDataResponseDtos(authors);
 
-            return dtos;
         } else {
+
             throw new NotFoundException("Authors should not be found");
         }
     }
 
-    public AuthorDataResponseDto findAuthorByFullname(String firstName, String lastName) {
 
+    public AuthorDataResponseDto findAuthorByFullname(@StringFormatValidation(groups = NameFormatValidation.class) String firstName,
+                                                      @StringFormatValidation(groups = NameFormatValidation.class) String lastName) {
         Optional<Author> foundAuthor = authorsRepository.findByFirstNameAndLastName(firstName, lastName);
 
-        if (foundAuthor.isPresent()) {
+        if (!foundAuthor.isEmpty()) {
             return dtoToAuthorConverter.authorToAuthorResponseDto(foundAuthor.get());
         } else {
+
             throw new NotFoundException("Author with name: " + firstName + " " + lastName + " was not found");
         }
+
+    }
+
+    public List<AuthorDataResponseDto> findAuthorsByLastName(@StringFormatValidation(groups = NameFormatValidation.class) String lastName) {
+
+        List<Author> authors = authorsRepository.findByLastName(lastName);
+
+        if (!authors.isEmpty()) {
+
+            return getAuthorDataResponseDtos(authors);
+
+        } else {
+
+            throw new NotFoundException("Authors should not be found");
+        }
+
 
     }
 
@@ -91,12 +112,23 @@ public class AuthorServices {
         Optional<Author> foundAuthor = authorsRepository.findById(Long.valueOf(id));
 
         if (foundAuthor.isPresent()) {
+
             return foundAuthor.get();
         } else {
-            throw new NotFoundException("Author with name: " + id + " was not found");
+            throw new NotFoundException("Author with id: " + id + " was not found");
         }
 
     }
+
+
+    private List<AuthorDataResponseDto> getAuthorDataResponseDtos(List<Author> authors) {
+
+        List<AuthorDataResponseDto> dtos = new ArrayList<>();
+
+        authors.forEach(author -> dtos.add(dtoToAuthorConverter.authorToAuthorResponseDto(author)));
+        return dtos;
+    }
+
 
     private Optional<Author> getSavedAuthor(AddAuthorRequestDto authorDto) {
 

@@ -71,5 +71,9 @@ public class SubjectServices {
         }
     }
 
+    public Boolean checkIsSubjectExist(String subjectName) {
+        return repository.findBySubject(subjectName).isPresent();
+    }
+
 
 }

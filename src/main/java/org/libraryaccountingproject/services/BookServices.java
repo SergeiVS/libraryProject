@@ -28,7 +28,7 @@ public class BookServices {
     @Transactional
     public BookResponseDto addBook(AddBookRequestDto bookDto) {
 
-        checkSubjectIsPresent(bookDto.getBookSubject());
+        subjectExistValidation(bookDto.getBookSubject());
 
         Book newBook = bookToBookDtoConverter.convertBookRequestDtoToBook(bookDto, subjectServices);
         newBook.setStatus(BookStatus.AVAILABLE);
@@ -74,10 +74,9 @@ public class BookServices {
     }
 
 
-
     public List<BookResponseDto> findBookBySubjectName(String subjectName) {
 
-        checkSubjectIsPresent(subjectName);
+        subjectExistValidation(subjectName);
 
         List<Book> foundBooks = booksRepository.findBySubjectName(subjectName);
 
@@ -85,7 +84,19 @@ public class BookServices {
 
     }
 
+
+//    public List<BookResponseDto> findBookByAuthorLastname(String authorLastname) {
+//
+//
+//    }
+
 // Private service methods
+
+    private void subjectExistValidation(String subjectName) {
+        if (!subjectServices.checkIsSubjectExist(subjectName)) {
+            throw new NotFoundException("Subject is not exist");
+        }
+    }
 
     private List<BookResponseDto> getBookResponseDtoList(List<Book> foundBooks) {
         if (!foundBooks.isEmpty()) {
@@ -96,11 +107,6 @@ public class BookServices {
         }
     }
 
-    private void checkSubjectIsPresent(String subjectName) {
-        if (subjectServices.findSubjectByName(subjectName) == null) {
-            throw new NotCreatedException("Subject not found, please insert one from preset subjects list");
-        }
-    }
 
     private List<BookResponseDto> getBookResponseDtosFromBooksList(List<Book> foundBooks) {
         List<BookResponseDto> bookDtos = new ArrayList<>();

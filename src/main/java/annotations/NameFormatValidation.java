@@ -24,7 +24,7 @@ public class NameFormatValidation implements ConstraintValidator<StringFormatVal
         }
 
 
-        if (!name.matches("^[A-Za-z0-9\\s]{3,25}$")) {
+        if (!name.matches("[A-Za-z0-9\\s]{3,25}")) {
             errors.add("Name must contain Letters, Numbers and spaces, it can not be shorter as 3 and " +
                     "longer as 35 symbols");
         }

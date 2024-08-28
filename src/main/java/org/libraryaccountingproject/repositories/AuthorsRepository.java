@@ -5,10 +5,23 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface AuthorsRepository extends JpaRepository<Author, Long> {
 
-    Optional<Author> findByFirstNameAndLastName(String firstName, String lastName);
+
+    default Optional<Author> findByFirstNameAndLastName(String firstName, String lastName) {
+
+        return findAll().stream()
+                .filter(author -> author.getFirstName().toLowerCase().contains(firstName))
+                .filter(author -> author.getLastName().toLowerCase().contains(lastName))
+                .findFirst();
+    };
+
+    List<Author> findByFirstName(String firstName);
+
+    List<Author> findByLastName(String lastName);
 }
