@@ -1,8 +1,10 @@
 package org.libraryaccountingproject.controllers;
 
+import jakarta.servlet.ServletRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.libraryaccountingproject.dtos.requests.AddAuthorRequestDto;
+import org.libraryaccountingproject.dtos.requests.UpdateAuthorDto;
 import org.libraryaccountingproject.dtos.responses.AuthorDataResponseDto;
 import org.libraryaccountingproject.services.AuthorServices;
 import org.springframework.http.HttpStatus;
@@ -42,5 +44,10 @@ public class AuthorsControllers {
     @GetMapping("/find-by-lastname")
     public ResponseEntity<List<AuthorDataResponseDto>> getAuthorByLastName(@RequestParam String lastName) {
         return new ResponseEntity<>(authorServices.findAuthorsByLastName(lastName), HttpStatus.FOUND);
+    }
+
+    @PutMapping("/update-author")
+    public ResponseEntity<AuthorDataResponseDto> updateAuthorData(@Valid @RequestBody UpdateAuthorDto dto){
+        return new ResponseEntity<>(authorServices.updateAuthorData(dto),HttpStatus.OK);
     }
 }

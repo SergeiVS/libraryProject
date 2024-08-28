@@ -6,6 +6,7 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.libraryaccountingproject.dtos.requests.AddAuthorRequestDto;
+import org.libraryaccountingproject.dtos.requests.UpdateAuthorDto;
 import org.libraryaccountingproject.dtos.responses.AuthorDataResponseDto;
 import org.libraryaccountingproject.entities.Author;
 import org.libraryaccountingproject.repositories.AuthorsRepository;
@@ -13,6 +14,7 @@ import org.libraryaccountingproject.services.exeptions.AlreadyExistException;
 import org.libraryaccountingproject.services.exeptions.NotCreatedException;
 import org.libraryaccountingproject.services.exeptions.NotFoundException;
 import org.libraryaccountingproject.services.utils.converters.AuthorDtoToAuthorConverter;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 
 import java.rmi.AlreadyBoundException;
@@ -105,6 +107,19 @@ public class AuthorServices {
         }
 
 
+    }
+
+    @Modifying(clearAutomatically = true)
+    public AuthorDataResponseDto updateAuthorData(UpdateAuthorDto dto) {
+        Optional<Author> foundAuthor = authorsRepository.findById(Long.valueOf(dto.getId()));
+        if (foundAuthor.isPresent()) {
+
+            Author author = authorsRepository.save(dtoToAuthorConverter.updateAuthorRequestDtoToAuthor(dto));
+
+            return dtoToAuthorConverter.authorToAuthorResponseDto(author);
+        } else {
+            throw new NotFoundException("Author with id: " + dto.getId() + " was not found");
+        }
     }
 
     public Author findAuthorEntityById(Integer id) {
