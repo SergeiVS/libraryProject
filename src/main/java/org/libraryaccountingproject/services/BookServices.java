@@ -2,8 +2,9 @@ package org.libraryaccountingproject.services;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.libraryaccountingproject.dtos.requests.AddBookRequestDto;
-import org.libraryaccountingproject.dtos.responses.BookResponseDto;
+import org.hibernate.validator.constraints.ISBN;
+import org.libraryaccountingproject.dtos.bookDtos.AddBookRequestDto;
+import org.libraryaccountingproject.dtos.bookDtos.BookResponseDto;
 import org.libraryaccountingproject.entities.Author;
 import org.libraryaccountingproject.entities.BookStatus;
 import org.libraryaccountingproject.entities.Book;
@@ -19,6 +20,7 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class BookServices {
+
     private final BooksRepository booksRepository;
     private final AuthorServices authorServices;
     private final SubjectServices subjectServices;
@@ -85,12 +87,65 @@ public class BookServices {
     }
 
 
-//    public List<BookResponseDto> findBookByAuthorLastname(String authorLastname) {
-//
-//
-//    }
+    public List<BookResponseDto> findBookByAuthor(Integer authorId) {
+
+        List<Book> foundBooks = booksRepository.findByAuthorId(authorId);
+
+        if (!foundBooks.isEmpty()) {
+
+            return getBookResponseDtoList(foundBooks);
+        } else {
+            throw new NotFoundException("No books of Author with id: " + authorId + " found");
+        }
+
+    }
+
+    public List<BookResponseDto> findBookByStatus(String status) {
+
+        System.out.println(status);
+
+        Optional<BookStatus> statusForSearch = getBookStatusFromString(status);
+
+        System.out.println(statusForSearch);
+
+        if (statusForSearch.isPresent()) {
+
+            List<Book> books = booksRepository.findByStatus(statusForSearch.get());
+
+            if (!books.isEmpty()) {
+
+                return getBookResponseDtoList(books);
+            } else {
+
+                throw new NotFoundException("No books of status " + status + " found");
+            }
+        } else {
+
+            throw new NotFoundException("No status " + status + " found");
+        }
+
+    }
+
+    public List<BookResponseDto> findBooksByISBN(String isbn) {
+
+        List<Book> foundBooks = booksRepository.findByISBN(isbn);
+
+        if (!foundBooks.isEmpty()) {
+
+            return getBookResponseDtoList(foundBooks);
+        } else {
+            throw new NotFoundException("No books of ISBN " + isbn + " found");
+        }
+    }
+
 
 // Private service methods
+
+    private static Optional<BookStatus> getBookStatusFromString(String status) {
+        return Arrays.stream(BookStatus.values())
+                .filter(objStatus -> objStatus.name().equalsIgnoreCase(status))
+                .findFirst();
+    }
 
     private void subjectExistValidation(String subjectName) {
         if (!subjectServices.checkIsSubjectExist(subjectName)) {

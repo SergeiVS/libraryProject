@@ -1,8 +1,8 @@
 package org.libraryaccountingproject.services.utils.converters;
 
 import jakarta.validation.Valid;
-import org.libraryaccountingproject.dtos.requests.AddUpdateAuthorRequestDto;
-import org.libraryaccountingproject.dtos.responses.AuthorDataResponseDto;
+import org.libraryaccountingproject.dtos.authorDtos.AddUpdateAuthorRequestDto;
+import org.libraryaccountingproject.dtos.authorDtos.AuthorDataResponseDto;
 import org.libraryaccountingproject.entities.Author;
 import org.springframework.stereotype.Component;
 

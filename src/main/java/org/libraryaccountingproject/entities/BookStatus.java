@@ -5,9 +5,9 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public enum BookStatus {
-    AVAILABLE( "Available"),
-    OUT("Out"),
-    ORDERED( "Ordered");
+    AVAILABLE( "available"),
+    OUT("out"),
+    ORDERED( "ordered");
 
     private String title;
 }

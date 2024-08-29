@@ -1,13 +1,11 @@
 package org.libraryaccountingproject.services.utils.converters;
 
 import lombok.RequiredArgsConstructor;
-import org.libraryaccountingproject.dtos.requests.AddBookRequestDto;
-import org.libraryaccountingproject.dtos.responses.AuthorDataResponseDto;
-import org.libraryaccountingproject.dtos.responses.BookResponseDto;
+import org.libraryaccountingproject.dtos.bookDtos.AddBookRequestDto;
+import org.libraryaccountingproject.dtos.authorDtos.AuthorDataResponseDto;
+import org.libraryaccountingproject.dtos.bookDtos.BookResponseDto;
 import org.libraryaccountingproject.entities.Book;
 import org.libraryaccountingproject.entities.BookStatus;
-import org.libraryaccountingproject.entities.BookSubject;
-import org.libraryaccountingproject.services.AuthorServices;
 import org.libraryaccountingproject.services.SubjectServices;
 import org.springframework.stereotype.Component;
 

@@ -1,9 +1,8 @@
-package org.libraryaccountingproject.dtos.responses;
+package org.libraryaccountingproject.dtos.subjectDtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Component;
 
 @Data
 @AllArgsConstructor

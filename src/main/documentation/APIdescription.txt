@@ -3,6 +3,7 @@ addNewAuthor
 Request:
 
     {
+        "id":"..."
         "firstName": "...",
         "lastName":"..."
     }

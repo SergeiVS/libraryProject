@@ -1,4 +1,4 @@
-package org.libraryaccountingproject.dtos.requests;
+package org.libraryaccountingproject.dtos.authorDtos;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PositiveOrZero;

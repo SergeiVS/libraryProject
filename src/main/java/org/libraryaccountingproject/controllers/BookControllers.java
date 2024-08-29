@@ -1,8 +1,9 @@
 package org.libraryaccountingproject.controllers;
 
 import jakarta.validation.Valid;
-import org.libraryaccountingproject.dtos.requests.AddBookRequestDto;
-import org.libraryaccountingproject.dtos.responses.BookResponseDto;
+import org.hibernate.validator.constraints.ISBN;
+import org.libraryaccountingproject.dtos.bookDtos.AddBookRequestDto;
+import org.libraryaccountingproject.dtos.bookDtos.BookResponseDto;
 import org.libraryaccountingproject.services.BookServices;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,6 +47,21 @@ public class BookControllers {
     @GetMapping("/find-by-subject")
     public ResponseEntity<List<BookResponseDto>> getBooksBySubjectName(@RequestParam String subjectName) {
         return new ResponseEntity<>(bookServices.findBookBySubjectName(subjectName), HttpStatus.FOUND);
+    }
+
+    @GetMapping("/find-by-author-id")
+    public ResponseEntity<List<BookResponseDto>> getBooksByAuthorId(@RequestParam int authorId) {
+        return new ResponseEntity<>(bookServices.findBookByAuthor(authorId), HttpStatus.FOUND);
+    }
+
+    @GetMapping("/find-by-status")
+    public ResponseEntity<List<BookResponseDto>> getBooksByStatus(@RequestParam String status) {
+        return new ResponseEntity<>(bookServices.findBookByStatus(status), HttpStatus.FOUND);
+    }
+
+    @GetMapping("/get-by-isbn")
+    public ResponseEntity<List<BookResponseDto>> getBooksByIsbn(@RequestParam String isbn) {
+        return new ResponseEntity<>(bookServices.findBooksByISBN(isbn), HttpStatus.FOUND);
     }
 
 }

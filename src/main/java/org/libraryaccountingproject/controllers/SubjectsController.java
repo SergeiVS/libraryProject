@@ -1,8 +1,7 @@
 package org.libraryaccountingproject.controllers;
 
-import lombok.Generated;
 import lombok.RequiredArgsConstructor;
-import org.libraryaccountingproject.dtos.responses.SubjectResponseDto;
+import org.libraryaccountingproject.dtos.subjectDtos.SubjectResponseDto;
 import org.libraryaccountingproject.services.SubjectServices;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

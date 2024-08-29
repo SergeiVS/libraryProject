@@ -1,4 +1,4 @@
-package org.libraryaccountingproject.dtos.responses;
+package org.libraryaccountingproject.dtos.authorDtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

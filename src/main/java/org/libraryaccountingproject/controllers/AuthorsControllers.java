@@ -2,8 +2,8 @@ package org.libraryaccountingproject.controllers;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.libraryaccountingproject.dtos.requests.AddUpdateAuthorRequestDto;
-import org.libraryaccountingproject.dtos.responses.AuthorDataResponseDto;
+import org.libraryaccountingproject.dtos.authorDtos.AddUpdateAuthorRequestDto;
+import org.libraryaccountingproject.dtos.authorDtos.AuthorDataResponseDto;
 import org.libraryaccountingproject.services.AuthorServices;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

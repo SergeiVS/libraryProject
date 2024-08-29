@@ -2,7 +2,7 @@ package org.libraryaccountingproject.services;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.libraryaccountingproject.dtos.responses.SubjectResponseDto;
+import org.libraryaccountingproject.dtos.subjectDtos.SubjectResponseDto;
 import org.libraryaccountingproject.entities.BookSubject;
 import org.libraryaccountingproject.repositories.BooksSubjectsRepository;
 import org.libraryaccountingproject.services.exeptions.NotCreatedException;
