@@ -1,10 +1,8 @@
 package org.libraryaccountingproject.controllers;
 
-import jakarta.servlet.ServletRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.libraryaccountingproject.dtos.requests.AddAuthorRequestDto;
-import org.libraryaccountingproject.dtos.requests.UpdateAuthorDto;
+import org.libraryaccountingproject.dtos.requests.AddUpdateAuthorRequestDto;
 import org.libraryaccountingproject.dtos.responses.AuthorDataResponseDto;
 import org.libraryaccountingproject.services.AuthorServices;
 import org.springframework.http.HttpStatus;
@@ -21,7 +19,7 @@ public class AuthorsControllers {
     private final AuthorServices authorServices;
 
     @PostMapping("/add-author")
-    public ResponseEntity<AuthorDataResponseDto> addAuthor(@Valid @RequestBody AddAuthorRequestDto authorDto) {
+    public ResponseEntity<AuthorDataResponseDto> addAuthor(@Valid @RequestBody AddUpdateAuthorRequestDto authorDto) {
 
         return new ResponseEntity<>(authorServices.addAuthor(authorDto), HttpStatus.CREATED);
     }
@@ -37,7 +35,7 @@ public class AuthorsControllers {
     }
 
     @GetMapping("/find-by-fullname")
-    public ResponseEntity<AuthorDataResponseDto> getAuthorByFullName(@RequestParam String firstName, @RequestParam String lastName) {
+    public ResponseEntity<List<AuthorDataResponseDto>> getAuthorByFullName(@RequestParam String firstName, @RequestParam String lastName) {
         return new ResponseEntity<>(authorServices.findAuthorByFullname(firstName, lastName), HttpStatus.FOUND) ;
     }
 
@@ -47,7 +45,13 @@ public class AuthorsControllers {
     }
 
     @PutMapping("/update-author")
-    public ResponseEntity<AuthorDataResponseDto> updateAuthorData(@Valid @RequestBody UpdateAuthorDto dto){
+    public ResponseEntity<AuthorDataResponseDto> updateAuthorData(@Valid @RequestBody AddUpdateAuthorRequestDto dto){
         return new ResponseEntity<>(authorServices.updateAuthorData(dto),HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deleteAuthor(@RequestParam Integer id) {
+
+        return new ResponseEntity<>(authorServices.deleteAuthorById(id), HttpStatus.OK);
     }
 }

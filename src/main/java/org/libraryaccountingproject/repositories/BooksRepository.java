@@ -5,18 +5,17 @@ import org.springframework.stereotype.Repository;
 import org.libraryaccountingproject.entities.Book;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface BooksRepository extends JpaRepository<Book, Long> {
 
-public default List<Book> findByPartTitle(String partTitle){
+default List<Book> findByPartTitle(String partTitle){
 return findAll().stream()
         .filter(book -> book.getTitle().toLowerCase().contains(partTitle))
         .toList();
 };
 
-public default List<Book> findBySubjectName(String subjectName){
+default List<Book> findBySubjectName(String subjectName){
     return findAll().stream()
             .filter(book -> book.getSubject().getSubject().toLowerCase().equals(subjectName))
             .toList();

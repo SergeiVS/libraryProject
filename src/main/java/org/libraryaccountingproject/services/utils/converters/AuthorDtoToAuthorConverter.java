@@ -1,7 +1,7 @@
 package org.libraryaccountingproject.services.utils.converters;
 
-import org.libraryaccountingproject.dtos.requests.AddAuthorRequestDto;
-import org.libraryaccountingproject.dtos.requests.UpdateAuthorDto;
+import jakarta.validation.Valid;
+import org.libraryaccountingproject.dtos.requests.AddUpdateAuthorRequestDto;
 import org.libraryaccountingproject.dtos.responses.AuthorDataResponseDto;
 import org.libraryaccountingproject.entities.Author;
 import org.springframework.stereotype.Component;
@@ -9,8 +9,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuthorDtoToAuthorConverter {
 
-    public Author newAuthorRequestDtoToAuthor(AddAuthorRequestDto dto) {
+    public Author newAuthorRequestDtoToAuthor(@Valid AddUpdateAuthorRequestDto dto) {
         Author author = new Author();
+
+        if (dto.getId() != null) {
+            author.setId(0);
+        } else {
+            author.setId(dto.getId());
+        }
+
         author.setFirstName(dto.getFirstName());
         author.setLastName(dto.getLastName());
         return author;
@@ -21,12 +28,5 @@ public class AuthorDtoToAuthorConverter {
         return new AuthorDataResponseDto(author.getId(), author.getFirstName(), author.getLastName());
     }
 
-    public Author updateAuthorRequestDtoToAuthor(UpdateAuthorDto dto) {
-        Author author = new Author();
-        author.setId(dto.getId());
-        author.setFirstName(dto.getFirstName());
-        author.setLastName(dto.getLastName());
-        return author;
-    }
 
 }
