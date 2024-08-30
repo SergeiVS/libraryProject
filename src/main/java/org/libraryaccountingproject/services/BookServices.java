@@ -2,20 +2,19 @@ package org.libraryaccountingproject.services;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.validator.constraints.ISBN;
 import org.libraryaccountingproject.dtos.bookDtos.AddBookRequestDto;
 import org.libraryaccountingproject.dtos.bookDtos.BookResponseDto;
 import org.libraryaccountingproject.entities.Author;
 import org.libraryaccountingproject.entities.BookStatus;
 import org.libraryaccountingproject.entities.Book;
 import org.libraryaccountingproject.repositories.BooksRepository;
-import org.libraryaccountingproject.services.exeptions.NotCreatedException;
 import org.libraryaccountingproject.services.exeptions.NotFoundException;
 import org.libraryaccountingproject.services.utils.converters.AuthorDtoToAuthorConverter;
 import org.libraryaccountingproject.services.utils.converters.BookToBookDtoConverter;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,32 +27,35 @@ public class BookServices {
     private final AuthorDtoToAuthorConverter dtoToAuthorConverter;
 
     @Transactional
-    public BookResponseDto addBook(AddBookRequestDto bookDto) {
+
+    public BookResponseDto addOrUpdateBook(AddBookRequestDto bookDto) {
 
         subjectExistValidation(bookDto.getBookSubject());
 
+
         Book newBook = bookToBookDtoConverter.convertBookRequestDtoToBook(bookDto, subjectServices);
-        newBook.setStatus(BookStatus.AVAILABLE);
-        newBook.setAuthors(getAuthorsSet(bookDto));
-        Optional<Book> savedBook = Optional.of(booksRepository.save(newBook));
 
-        if (savedBook.isPresent()) {
+        Optional<BookStatus> status = getBookStatusFromString(bookDto.getStatus());
 
-            Book updatedBook = savedBook.get();
+        if (status.isPresent()) {
 
-            return bookToBookDtoConverter.convertBookToAddBookResponseDto(updatedBook, dtoToAuthorConverter);
-
+            newBook.setStatus(status.get());
         } else {
-            throw new NotCreatedException("Book could not be saved");
+            newBook.setStatus(BookStatus.AVAILABLE);
         }
+
+        newBook.setAuthors(getAuthorsSet(bookDto));
+        Book savedBook = booksRepository.save(newBook);
+
+        return bookToBookDtoConverter.convertBookToAddBookResponseDto(savedBook, dtoToAuthorConverter);
+
     }
 
 
     public List<BookResponseDto> findAllBooks() {
 
         List<Book> books = booksRepository.findAll();
-        List<BookResponseDto> bookResponseDtos = getBookResponseDtosFromBooksList(books);
-        return bookResponseDtos;
+        return getBookResponseDtosFromBooksList(books);
     }
 
     public BookResponseDto findBookById(Integer id) {
@@ -66,7 +68,6 @@ public class BookServices {
         }
     }
 
-    ;
 
     public List<BookResponseDto> findBookByPartTitle(String title) {
 
@@ -142,6 +143,7 @@ public class BookServices {
 // Private service methods
 
     private static Optional<BookStatus> getBookStatusFromString(String status) {
+
         return Arrays.stream(BookStatus.values())
                 .filter(objStatus -> objStatus.name().equalsIgnoreCase(status))
                 .findFirst();
@@ -155,8 +157,7 @@ public class BookServices {
 
     private List<BookResponseDto> getBookResponseDtoList(List<Book> foundBooks) {
         if (!foundBooks.isEmpty()) {
-            List<BookResponseDto> bookDtos = getBookResponseDtosFromBooksList(foundBooks);
-            return bookDtos;
+            return getBookResponseDtosFromBooksList(foundBooks);
         } else {
             throw new NotFoundException("Book could not be found");
         }
@@ -175,12 +176,9 @@ public class BookServices {
 
 
     private Set<Author> getAuthorsSet(AddBookRequestDto bookDto) {
-        Set<Author> authors = new HashSet<>();
-        bookDto.getAuthorsIds()
-                .forEach(bookId -> {
-                    authors.add(authorServices.findAuthorEntityById(bookId));
-                });
-        return authors;
+
+        return bookDto.getAuthorsIds().stream()
+                .map(authorServices::findAuthorEntityById).collect(Collectors.toSet());
     }
 
 }

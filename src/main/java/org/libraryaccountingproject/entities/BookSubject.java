@@ -17,7 +17,6 @@ public class BookSubject {
     private Integer id;
 
     @NotBlank(message = "Subject could not be empty")
-    @UniqueElements
     private String subject;
 
 }

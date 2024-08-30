@@ -19,9 +19,12 @@ public class BookToBookDtoConverter {
 
     public Book convertBookRequestDtoToBook(AddBookRequestDto bookDto, SubjectServices subjectServices) {
         Book book = new Book();
+
+        book.setBookId(bookDto.getId());
         book.setTitle(bookDto.getBookTitle());
         book.setSubject(subjectServices.findSubjectObjectByName(bookDto.getBookSubject()));
         book.setCodeISBN(bookDto.getCodeISBN());
+
         return book;
     }
 

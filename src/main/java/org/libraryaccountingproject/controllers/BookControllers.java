@@ -1,7 +1,6 @@
 package org.libraryaccountingproject.controllers;
 
 import jakarta.validation.Valid;
-import org.hibernate.validator.constraints.ISBN;
 import org.libraryaccountingproject.dtos.bookDtos.AddBookRequestDto;
 import org.libraryaccountingproject.dtos.bookDtos.BookResponseDto;
 import org.libraryaccountingproject.services.BookServices;
@@ -23,9 +22,9 @@ public class BookControllers {
     }
 
 
-    @PostMapping("/add-book")
+    @PostMapping("/add-or-update-book")
     public ResponseEntity<BookResponseDto> addBook(@Valid @RequestBody AddBookRequestDto bookDto) {
-        return new ResponseEntity<>(bookServices.addBook(bookDto), HttpStatus.CREATED);
+        return new ResponseEntity<>(bookServices.addOrUpdateBook(bookDto), HttpStatus.CREATED);
     }
 
     @GetMapping
