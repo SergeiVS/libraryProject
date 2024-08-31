@@ -40,22 +40,22 @@ public class BookControllers {
 
     @GetMapping("/find-by-title")
     public ResponseEntity<List<BookResponseDto>> getBooksByPartTitle(@RequestParam String partTitle) {
-        return new ResponseEntity<>(bookServices.findBookByPartTitle(partTitle), HttpStatus.FOUND);
+        return new ResponseEntity<>(bookServices.findBooksByPartTitle(partTitle), HttpStatus.FOUND);
     }
 
     @GetMapping("/find-by-subject")
     public ResponseEntity<List<BookResponseDto>> getBooksBySubjectName(@RequestParam String subjectName) {
-        return new ResponseEntity<>(bookServices.findBookBySubjectName(subjectName), HttpStatus.FOUND);
+        return new ResponseEntity<>(bookServices.findBooksBySubjectName(subjectName), HttpStatus.FOUND);
     }
 
     @GetMapping("/find-by-author-id")
     public ResponseEntity<List<BookResponseDto>> getBooksByAuthorId(@RequestParam int authorId) {
-        return new ResponseEntity<>(bookServices.findBookByAuthor(authorId), HttpStatus.FOUND);
+        return new ResponseEntity<>(bookServices.findBooksByAuthor(authorId), HttpStatus.FOUND);
     }
 
     @GetMapping("/find-by-status")
     public ResponseEntity<List<BookResponseDto>> getBooksByStatus(@RequestParam String status) {
-        return new ResponseEntity<>(bookServices.findBookByStatus(status), HttpStatus.FOUND);
+        return new ResponseEntity<>(bookServices.findBooksByStatus(status), HttpStatus.FOUND);
     }
 
     @GetMapping("/get-by-isbn")

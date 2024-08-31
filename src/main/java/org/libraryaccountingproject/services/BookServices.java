@@ -35,14 +35,9 @@ public class BookServices {
 
         Book newBook = bookToBookDtoConverter.convertBookRequestDtoToBook(bookDto, subjectServices);
 
-        Optional<BookStatus> status = getBookStatusFromString(bookDto.getStatus());
+        BookStatus status = getBookStatusFromString(bookDto.getStatus());
 
-        if (status.isPresent()) {
-
-            newBook.setStatus(status.get());
-        } else {
-            newBook.setStatus(BookStatus.AVAILABLE);
-        }
+        newBook.setStatus(status);
 
         newBook.setAuthors(getAuthorsSet(bookDto));
         Book savedBook = booksRepository.save(newBook);
@@ -62,6 +57,7 @@ public class BookServices {
         Optional<Book> foundBook = booksRepository.findById(Long.valueOf(id));
 
         if (foundBook.isPresent()) {
+
             return bookToBookDtoConverter.convertBookToAddBookResponseDto(foundBook.get(), dtoToAuthorConverter);
         } else {
             throw new NotFoundException("Book could not be found");
@@ -69,7 +65,7 @@ public class BookServices {
     }
 
 
-    public List<BookResponseDto> findBookByPartTitle(String title) {
+    public List<BookResponseDto> findBooksByPartTitle(String title) {
 
         List<Book> foundBooks = booksRepository.findByPartTitle(title);
 
@@ -77,7 +73,7 @@ public class BookServices {
     }
 
 
-    public List<BookResponseDto> findBookBySubjectName(String subjectName) {
+    public List<BookResponseDto> findBooksBySubjectName(String subjectName) {
 
         subjectExistValidation(subjectName);
 
@@ -88,7 +84,7 @@ public class BookServices {
     }
 
 
-    public List<BookResponseDto> findBookByAuthor(Integer authorId) {
+    public List<BookResponseDto> findBooksByAuthor(Integer authorId) {
 
         List<Book> foundBooks = booksRepository.findByAuthorId(authorId);
 
@@ -101,30 +97,17 @@ public class BookServices {
 
     }
 
-    public List<BookResponseDto> findBookByStatus(String status) {
+    public List<BookResponseDto> findBooksByStatus(String status) {
 
-        System.out.println(status);
+        BookStatus statusForSearch = getBookStatusFromString(status);
 
-        Optional<BookStatus> statusForSearch = getBookStatusFromString(status);
+        List<Book> books = booksRepository.findByStatus(statusForSearch);
 
-        System.out.println(statusForSearch);
-
-        if (statusForSearch.isPresent()) {
-
-            List<Book> books = booksRepository.findByStatus(statusForSearch.get());
-
-            if (!books.isEmpty()) {
-
-                return getBookResponseDtoList(books);
-            } else {
-
-                throw new NotFoundException("No books of status " + status + " found");
-            }
+        if (!books.isEmpty()) {
+            return getBookResponseDtoList(books);
         } else {
-
-            throw new NotFoundException("No status " + status + " found");
+            throw new NotFoundException("No books of status " + status + " found");
         }
-
     }
 
     public List<BookResponseDto> findBooksByISBN(String isbn) {
@@ -142,16 +125,20 @@ public class BookServices {
 
 // Private service methods
 
-    private static Optional<BookStatus> getBookStatusFromString(String status) {
+    private static BookStatus getBookStatusFromString(String status) {
+
+        if (status.isBlank()) return BookStatus.AVAILABLE;
 
         return Arrays.stream(BookStatus.values())
                 .filter(objStatus -> objStatus.name().equalsIgnoreCase(status))
-                .findFirst();
+                .findFirst()
+                .orElseThrow();
     }
 
     private void subjectExistValidation(String subjectName) {
+
         if (!subjectServices.checkIsSubjectExist(subjectName)) {
-            throw new NotFoundException("Subject is not exist");
+            throw new IllegalArgumentException("Subject is not exist");
         }
     }
 
@@ -165,20 +152,18 @@ public class BookServices {
 
 
     private List<BookResponseDto> getBookResponseDtosFromBooksList(List<Book> foundBooks) {
-        List<BookResponseDto> bookDtos = new ArrayList<>();
 
-        foundBooks.forEach(book -> {
-            BookResponseDto dto = bookToBookDtoConverter.convertBookToAddBookResponseDto(book, dtoToAuthorConverter);
-            bookDtos.add(dto);
-        });
-        return bookDtos;
+        return foundBooks.stream()
+                .map(book -> bookToBookDtoConverter.convertBookToAddBookResponseDto(book, dtoToAuthorConverter))
+                .toList();
     }
 
 
     private Set<Author> getAuthorsSet(AddBookRequestDto bookDto) {
 
         return bookDto.getAuthorsIds().stream()
-                .map(authorServices::findAuthorEntityById).collect(Collectors.toSet());
+                .map(authorServices::findAuthorEntityById)
+                .collect(Collectors.toSet());
     }
 
 }

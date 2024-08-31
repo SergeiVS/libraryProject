@@ -12,15 +12,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.ISBN;
 import org.springframework.format.annotation.NumberFormat;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class AddBookRequestDto {
 
-    @PositiveOrZero(message = "Id cann be positive or zero")
+    @PositiveOrZero(message = "Id should be positive or zero")
     @NumberFormat(style = NumberFormat.Style.NUMBER)
     private Integer id;
 
