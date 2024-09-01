@@ -31,4 +31,5 @@ public class NewUserRequestDto {
     @NotBlank
     @Email
     private String userEmail;
+    private String userRole;
 }

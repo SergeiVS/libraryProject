@@ -65,6 +65,18 @@ public class UserRoleServices {
             throw new NotFoundException("No userRole: " + role + " found");
         }
     }
+    public Boolean isUserRoleExist(String role) {
+       return repository.existsByRoleName(role);
+    }
+
+    public UserRole getUserRoleEntityByRoleName(String role) {
+        Optional<UserRole> foundRole = repository.findByRoleName(role);
+        if (foundRole.isPresent()) {
+            return foundRole.get();
+        }else {
+            throw new NotFoundException("No userRole: " + role + " found");
+        }
+    }
 
     public UserRoleDto getUserRoleById(Long id) {
         Optional<UserRole> foundRole = repository.findById(id);
