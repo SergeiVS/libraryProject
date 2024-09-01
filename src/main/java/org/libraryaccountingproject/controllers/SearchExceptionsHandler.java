@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.lang.reflect.Field;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.sql.SQLIntegrityConstraintViolationException;
 
 @ControllerAdvice
@@ -32,6 +34,15 @@ public class SearchExceptionsHandler {
 
     @ExceptionHandler(NullPointerException.class)
     public ResponseEntity<String> handlerNullPointerException(NullPointerException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(MalformedURLException.class)
+    public ResponseEntity<String> handlerMalformedURLException(MalformedURLException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    @ExceptionHandler(URISyntaxException.class)
+    public ResponseEntity<String> handlerURISyntaxException(URISyntaxException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
