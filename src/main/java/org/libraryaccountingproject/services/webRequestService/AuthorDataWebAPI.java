@@ -1,5 +1,6 @@
 package org.libraryaccountingproject.services.webRequestService;
 
+import constatnts.UrlPaths;
 import lombok.AllArgsConstructor;
 import org.libraryaccountingproject.dtos.authorsJsonData.AuthorDataFromWebResponseDto;
 import org.libraryaccountingproject.dtos.authorsJsonData.AuthorJSON;
@@ -18,8 +19,8 @@ import java.util.logging.Logger;
 @Service
 @AllArgsConstructor
 public class AuthorDataWebAPI {
+
     private final Logger log = Logger.getLogger(this.getClass().getName());
-    private final String webUrl = "https://openlibrary.org/search/authors.json";
     private final RestTemplate restTemplate = new RestTemplate();
     private final AuthorDataJsonToDto converter = new AuthorDataJsonToDto();
 
@@ -48,9 +49,10 @@ public class AuthorDataWebAPI {
     }
 
     private String parseRequestUrl(String name) {
-        return UriComponentsBuilder.fromHttpUrl(webUrl)
+        return UriComponentsBuilder.fromHttpUrl(UrlPaths.AUTHOR_DATA_SEARCH_URL)
                 .path("?q={name}")
-                .buildAndExpand(name).toUriString();
+                .buildAndExpand(name)
+                .toUriString();
     }
 
 }
