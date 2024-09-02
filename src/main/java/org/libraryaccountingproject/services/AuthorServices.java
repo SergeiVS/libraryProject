@@ -30,9 +30,10 @@ public class AuthorServices {
     @Transactional
     public AuthorDataResponseDto addAuthor(AddUpdateAuthorRequestDto authorDto) {
 
-        if (this.authorsRepository.findByFirstNameAndLastName(authorDto.getFirstName(), authorDto.getLastName()).isEmpty()) {
+        if (authorsRepository.findByFirstNameAndLastName(authorDto.getFirstName(), authorDto.getLastName()).isEmpty()) {
 
-            Optional<Author> savedAuthor = getSavedAuthor(authorDto);
+            Author authorForSave = dtoToAuthorConverter.newAuthorRequestDtoToAuthor(authorDto);
+            Optional<Author> savedAuthor = Optional.ofNullable(authorsRepository.save(authorForSave));
 
             if (savedAuthor.isPresent()) {
 
@@ -165,16 +166,5 @@ public class AuthorServices {
     }
 
 
-    private Optional<Author> getSavedAuthor(AddUpdateAuthorRequestDto authorDto) {
-
-        Author author = new Author();
-
-        author.setFirstName(authorDto.getFirstName());
-        author.setLastName(authorDto.getLastName());
-
-        Optional<Author> savedAuthor = Optional.of(authorsRepository.save(author));
-
-        return savedAuthor;
-    }
 
 }

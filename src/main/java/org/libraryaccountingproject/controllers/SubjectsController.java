@@ -19,7 +19,7 @@ public class SubjectsController {
 
    private final SubjectServices subjectServices;
 
-    @GetMapping("/add-subject")
+    @GetMapping("/subject")
     public ResponseEntity<SubjectResponseDto> addNewSubject(@RequestParam String subject) {
         return new ResponseEntity<>(subjectServices.addNewSubject(subject), HttpStatus.CREATED);
     }

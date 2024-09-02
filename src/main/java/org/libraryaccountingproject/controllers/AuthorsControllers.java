@@ -18,7 +18,7 @@ public class AuthorsControllers {
 
     private final AuthorServices authorServices;
 
-    @PostMapping("/add-author")
+    @PostMapping("/author")
     public ResponseEntity<AuthorDataResponseDto> addAuthor(@Valid @RequestBody AddUpdateAuthorRequestDto authorDto) {
 
         return new ResponseEntity<>(authorServices.addAuthor(authorDto), HttpStatus.CREATED);
@@ -34,23 +34,23 @@ public class AuthorsControllers {
         return new ResponseEntity<>(authorServices.findAuthorById(id),HttpStatus.FOUND);
     }
 
-    @GetMapping("/find-by-fullname")
+    @GetMapping("/fullname")
     public ResponseEntity<List<AuthorDataResponseDto>> getAuthorByFullName(@RequestParam String firstName, @RequestParam String lastName) {
         return new ResponseEntity<>(authorServices.findAuthorByFullname(firstName, lastName), HttpStatus.FOUND) ;
     }
 
-    @GetMapping("/find-by-lastname")
-    public ResponseEntity<List<AuthorDataResponseDto>> getAuthorByLastName(@RequestParam String lastName) {
+    @GetMapping("/{lastName}")
+    public ResponseEntity<List<AuthorDataResponseDto>> getAuthorByLastName(@PathVariable String lastName) {
         return new ResponseEntity<>(authorServices.findAuthorsByLastName(lastName), HttpStatus.FOUND);
     }
 
-    @PutMapping("/update-author")
+    @PutMapping("/author")
     public ResponseEntity<AuthorDataResponseDto> updateAuthorData(@Valid @RequestBody AddUpdateAuthorRequestDto dto){
         return new ResponseEntity<>(authorServices.updateAuthorData(dto),HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<String> deleteAuthor(@RequestParam Integer id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteAuthor(@PathVariable Integer id) {
 
         return new ResponseEntity<>(authorServices.deleteAuthorById(id), HttpStatus.OK);
     }

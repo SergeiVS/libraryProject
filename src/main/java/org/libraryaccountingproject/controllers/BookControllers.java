@@ -22,7 +22,7 @@ public class BookControllers {
     }
 
 
-    @PostMapping("/add-or-update-book")
+    @PostMapping("/book")
     public ResponseEntity<BookResponseDto> addBook(@Valid @RequestBody AddBookRequestDto bookDto) {
         return new ResponseEntity<>(bookServices.addOrUpdateBook(bookDto), HttpStatus.CREATED);
     }
@@ -38,28 +38,28 @@ public class BookControllers {
         return new ResponseEntity<>(bookServices.findBookById(id), HttpStatus.FOUND);
     }
 
-    @GetMapping("/find-by-title")
-    public ResponseEntity<List<BookResponseDto>> getBooksByPartTitle(@RequestParam String partTitle) {
-        return new ResponseEntity<>(bookServices.findBooksByPartTitle(partTitle), HttpStatus.FOUND);
+    @GetMapping("/{title}")
+    public ResponseEntity<List<BookResponseDto>> getBooksByPartTitle(@PathVariable String title) {
+        return new ResponseEntity<>(bookServices.findBooksByPartTitle(title), HttpStatus.FOUND);
     }
 
-    @GetMapping("/find-by-subject")
-    public ResponseEntity<List<BookResponseDto>> getBooksBySubjectName(@RequestParam String subjectName) {
-        return new ResponseEntity<>(bookServices.findBooksBySubjectName(subjectName), HttpStatus.FOUND);
+    @GetMapping("/{subject}")
+    public ResponseEntity<List<BookResponseDto>> getBooksBySubjectName(@PathVariable String subject) {
+        return new ResponseEntity<>(bookServices.findBooksBySubjectName(subject), HttpStatus.FOUND);
     }
 
-    @GetMapping("/find-by-author-id")
-    public ResponseEntity<List<BookResponseDto>> getBooksByAuthorId(@RequestParam int authorId) {
-        return new ResponseEntity<>(bookServices.findBooksByAuthor(authorId), HttpStatus.FOUND);
+    @GetMapping("/{id}")
+    public ResponseEntity<List<BookResponseDto>> getBooksByAuthorId(@PathVariable int id) {
+        return new ResponseEntity<>(bookServices.findBooksByAuthor(id), HttpStatus.FOUND);
     }
 
-    @GetMapping("/find-by-status")
-    public ResponseEntity<List<BookResponseDto>> getBooksByStatus(@RequestParam String status) {
+    @GetMapping("/{status}")
+    public ResponseEntity<List<BookResponseDto>> getBooksByStatus(@PathVariable String status) {
         return new ResponseEntity<>(bookServices.findBooksByStatus(status), HttpStatus.FOUND);
     }
 
-    @GetMapping("/get-by-isbn")
-    public ResponseEntity<List<BookResponseDto>> getBooksByIsbn(@RequestParam String isbn) {
+    @GetMapping("/{isbn}")
+    public ResponseEntity<List<BookResponseDto>> getBooksByIsbn(@PathVariable String isbn) {
         return new ResponseEntity<>(bookServices.findBooksByISBN(isbn), HttpStatus.FOUND);
     }
 
