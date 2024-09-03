@@ -1,8 +1,10 @@
 package org.libraryaccountingproject.controllers;
 
 import jakarta.validation.ConstraintViolationException;
+import org.libraryaccountingproject.services.exeptions.RestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -54,5 +56,10 @@ public class ValidationsExceptionsHandlers {
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<String> handlerAccessDeniedException(AccessDeniedException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(RestException.class)
+    public ResponseEntity<String> handlerRestException(RestException exception) {
+        return new ResponseEntity<>(exception.getMessage(), exception.getStatus());
     }
 }

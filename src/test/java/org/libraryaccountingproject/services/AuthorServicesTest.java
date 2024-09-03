@@ -1,16 +1,12 @@
 package org.libraryaccountingproject.services;
 
-import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.libraryaccountingproject.dtos.authorDtos.AddUpdateAuthorRequestDto;
+import org.libraryaccountingproject.dtos.authorDtos.NewAuthorRequestDto;
 import org.libraryaccountingproject.dtos.authorDtos.AuthorDataResponseDto;
 import org.libraryaccountingproject.entities.Author;
 import org.libraryaccountingproject.repositories.AuthorsRepository;
 import org.libraryaccountingproject.services.utils.converters.AuthorDtoToAuthorConverter;
-import org.mockito.Mock;
-
-import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
@@ -22,7 +18,7 @@ class AuthorServicesTest {
     private AuthorsRepository authorsRepository;
     private Author author;
     private AuthorDtoToAuthorConverter converter = new AuthorDtoToAuthorConverter();
-    private AddUpdateAuthorRequestDto requestDto;
+    private NewAuthorRequestDto requestDto;
     private AuthorDataResponseDto responseDto;
 
 
@@ -38,7 +34,7 @@ class AuthorServicesTest {
 
     void fillRequestDto(int id, String firstName, String lastName) {
 
-        requestDto = new AddUpdateAuthorRequestDto(id, firstName, lastName);
+        requestDto = new NewAuthorRequestDto(id, firstName, lastName);
     }
 
     @Test
