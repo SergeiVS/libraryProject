@@ -8,13 +8,13 @@ import java.util.Optional;
 
 
 @Repository
-public interface BooksSubjectsRepository extends JpaRepository<BookSubject, Long> {
+public interface BooksSubjectsRepository extends JpaRepository<BookSubject, Integer> {
 
-    public default Optional<BookSubject> findBySubject(String subject) {
-        return findAll().stream()
-                .filter(objectSubject -> objectSubject.getSubject().toLowerCase().equals(subject))
-                .findFirst();
-    }
+    boolean existsById(Integer id);
 
-    ;
+    Optional<BookSubject> findById(Integer id);
+
+    boolean existsBySubject(String subject);
+
+    Optional<BookSubject> findBySubject(String subject);
 }

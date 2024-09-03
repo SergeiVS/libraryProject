@@ -73,7 +73,7 @@ abstract User
       private String userLogin;
       private String password;
       private String userEmail;
-      private UserRole userRole;
+      private UserRole userRol;
 
 
 Reader extends User

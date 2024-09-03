@@ -3,7 +3,7 @@ package org.libraryaccountingproject.services;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.libraryaccountingproject.dtos.userRoleDtos.UserRoleDto;
-import org.libraryaccountingproject.entities.UserRole;
+import org.libraryaccountingproject.entities.UserRol;
 import org.libraryaccountingproject.repositories.UserRoleRepository;
 import org.libraryaccountingproject.services.exeptions.NotFoundException;
 import org.libraryaccountingproject.services.utils.converters.UserRoleConverter;
@@ -24,12 +24,12 @@ public class UserRoleServices {
 
         checkRoleName(role.toUpperCase());
 
-        UserRole roleForSave = new UserRole();
+        UserRol roleForSave = new UserRol();
         roleForSave.setRoleName(role);
 
-        UserRole savedUserRole = repository.save(roleForSave);
+        UserRol savedUserRol = repository.save(roleForSave);
 
-        return converter.convertUserRoletoDto(savedUserRole);
+        return converter.convertUserRoletoDto(savedUserRol);
 
     }
 
@@ -38,27 +38,27 @@ public class UserRoleServices {
 
         checkRoleNameDto(userRoleDto);
 
-        UserRole roleForSave = converter.convertUserRoleDtoToUserRole(userRoleDto);
+        UserRol roleForSave = converter.convertUserRoleDtoToUserRole(userRoleDto);
 
-        UserRole savedUserRole = repository.save(roleForSave);
+        UserRol savedUserRol = repository.save(roleForSave);
 
-        return converter.convertUserRoletoDto(savedUserRole);
+        return converter.convertUserRoletoDto(savedUserRol);
     }
 
     public List<UserRoleDto> getAllUserRoles() {
 
-        List<UserRole> userRoles = repository.findAll();
+        List<UserRol> userRols = repository.findAll();
 
-        if (!userRoles.isEmpty()) {
+        if (!userRols.isEmpty()) {
 
-            return getListOfUserRolesDto(userRoles);
+            return getListOfUserRolesDto(userRols);
         } else {
-            throw new NotFoundException("No userRoles found");
+            throw new NotFoundException("No userRols found");
         }
     }
 
     public UserRoleDto getUserRoleByRoleName(String role) {
-        Optional<UserRole> foundRole = repository.findByRoleName(role);
+        Optional<UserRol> foundRole = repository.findByRoleName(role);
         if (foundRole.isPresent()) {
             return converter.convertUserRoletoDto(foundRole.get());
         } else {
@@ -69,8 +69,8 @@ public class UserRoleServices {
        return repository.existsByRoleName(role);
     }
 
-    public UserRole getUserRoleEntityByRoleName(String role) {
-        Optional<UserRole> foundRole = repository.findByRoleName(role);
+    public UserRol getUserRoleEntityByRoleName(String role) {
+        Optional<UserRol> foundRole = repository.findByRoleName(role);
         if (foundRole.isPresent()) {
             return foundRole.get();
         }else {
@@ -79,7 +79,7 @@ public class UserRoleServices {
     }
 
     public UserRoleDto getUserRoleById(Long id) {
-        Optional<UserRole> foundRole = repository.findById(id);
+        Optional<UserRol> foundRole = repository.findById(id);
         if (foundRole.isPresent()) {
             return converter.convertUserRoletoDto(foundRole.get());
         }else {
@@ -88,8 +88,8 @@ public class UserRoleServices {
     }
 
 
-    private List<UserRoleDto> getListOfUserRolesDto(List<UserRole> userRoles) {
-        return userRoles.stream()
+    private List<UserRoleDto> getListOfUserRolesDto(List<UserRol> userRols) {
+        return userRols.stream()
                 .map(converter::convertUserRoletoDto)
                 .toList();
     }
@@ -98,7 +98,7 @@ public class UserRoleServices {
         if (role.isBlank()) {
             throw new IllegalArgumentException("Role cannot be blank");
         }
-        if (!repository.findAll().stream().noneMatch(userRole -> userRole.equals(role.toUpperCase()))) {
+        if (!repository.findAll().stream().noneMatch(userRol -> userRol.equals(role.toUpperCase()))) {
             throw new IllegalArgumentException("Role already exist");
         }
     }
@@ -113,7 +113,7 @@ public class UserRoleServices {
         }
 
         if (repository.findAll().stream()
-                .noneMatch(userRole -> userRole.getId() == userRoleDto.getId())) {
+                .noneMatch(userRol -> userRol.getId() == userRoleDto.getId())) {
             throw new IllegalArgumentException("Role id: " + userRoleDto.getId() + " does not exist");
         }
     }

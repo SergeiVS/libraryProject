@@ -135,7 +135,7 @@ public class UserServices {
         if (userRoleServices.isUserRoleExist(role)) {
             return true;
         } else {
-            throw new IllegalArgumentException("No UserRole: " + role + " present");
+            throw new IllegalArgumentException("No UserRol: " + role + " present");
         }
     }
 

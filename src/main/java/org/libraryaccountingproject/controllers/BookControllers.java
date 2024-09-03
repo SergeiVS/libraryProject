@@ -24,7 +24,7 @@ public class BookControllers {
 
     @PostMapping("/book")
     public ResponseEntity<BookResponseDto> addBook(@Valid @RequestBody AddBookRequestDto bookDto) {
-        return new ResponseEntity<>(bookServices.addOrUpdateBook(bookDto), HttpStatus.CREATED);
+        return new ResponseEntity<>(bookServices.addBook(bookDto), HttpStatus.CREATED);
     }
 
     @GetMapping

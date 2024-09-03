@@ -18,7 +18,7 @@ import java.util.Set;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-
+@Builder
 public class Book {
 
     public enum BookStatus {
@@ -44,15 +44,15 @@ public class Book {
     @JsonBackReference
     private Set<Author> authors;
 
-    @ManyToOne
-    @JoinColumn(name = "subject_id")
-    @JsonBackReference
-    private BookSubject subject;
-
     @NotBlank(message = "ISBN could not be empty")
     @Size(min = 10, message = "ISBN could not be shorter as 10 digits")
     @ISBN(message = "ISBN must be in proper format")
     private String codeISBN;
+
+    @ManyToOne
+    @JoinColumn(name = "subject_id")
+    @JsonBackReference
+    private BookSubject subject;
 
     @Enumerated(EnumType.STRING)
     private BookStatus status;

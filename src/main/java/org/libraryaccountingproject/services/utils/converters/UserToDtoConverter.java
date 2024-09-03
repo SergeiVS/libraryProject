@@ -16,7 +16,7 @@ public class UserToDtoConverter {
         user.setLastName(dto.getLastName());
         user.setUserLogin(dto.getUserLogin());
         user.setPassword(dto.getPassword());
-        user.setUserRole(roleServices.getUserRoleEntityByRoleName(dto.getUserRole()));
+        user.setUserRol(roleServices.getUserRoleEntityByRoleName(dto.getUserRole()));
         return user;
     }
 
@@ -25,7 +25,7 @@ public class UserToDtoConverter {
         user.setFirstName(dto.getFirstName());
         user.setLastName(dto.getLastName());
         user.setUserEmail(dto.getUserEmail());
-        user.setUserRole(roleServices.getUserRoleEntityByRoleName(dto.getUserRole()));
+        user.setUserRol(roleServices.getUserRoleEntityByRoleName(dto.getUserRole()));
         return user;
     }
 
@@ -36,7 +36,7 @@ public class UserToDtoConverter {
         dto.setFirstName(user.getFirstName());
         dto.setLastName(user.getLastName());
         dto.setUserEmail(user.getUserLogin());
-        dto.setUserRole(user.getUserRole().getRoleName());
+        dto.setUserRole(user.getUserRol().getRoleName());
 
         return dto;
 

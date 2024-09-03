@@ -1,17 +1,20 @@
 package org.libraryaccountingproject.services;
 
+import constatnts.UrlPaths;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.libraryaccountingproject.dtos.bookDtos.AddBookRequestDto;
 import org.libraryaccountingproject.dtos.bookDtos.BookResponseDto;
+import org.libraryaccountingproject.dtos.bookDtos.UpdateBookRequestDto;
 import org.libraryaccountingproject.entities.Author;
-import org.libraryaccountingproject.entities.BookStatus;
 import org.libraryaccountingproject.entities.Book;
+import org.libraryaccountingproject.entities.BookSubject;
 import org.libraryaccountingproject.repositories.BooksRepository;
 import org.libraryaccountingproject.services.exeptions.NotFoundException;
 import org.libraryaccountingproject.services.utils.converters.AuthorDtoToAuthorConverter;
 import org.libraryaccountingproject.services.utils.converters.BookToBookDtoConverter;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -28,22 +31,32 @@ public class BookServices {
 
     @Transactional
 
-    public BookResponseDto addOrUpdateBook(AddBookRequestDto bookDto) {
+    public BookResponseDto addBook(AddBookRequestDto bookDto) {
 
         subjectExistValidation(bookDto.getBookSubject());
 
+        Book newBook = getNewBook(bookDto);
 
-        Book newBook = bookToBookDtoConverter.convertBookRequestDtoToBook(bookDto, subjectServices);
-
-        BookStatus status = getBookStatusFromString(bookDto.getStatus());
-
-        newBook.setStatus(status);
-
-        newBook.setAuthors(getAuthorsSet(bookDto));
         Book savedBook = booksRepository.save(newBook);
 
-        return bookToBookDtoConverter.convertBookToAddBookResponseDto(savedBook, dtoToAuthorConverter);
+        return bookToBookDtoConverter.convertBookToBookResponseDto(savedBook, dtoToAuthorConverter);
 
+    }
+
+    @Transactional
+    public BookResponseDto updateBook(UpdateBookRequestDto bookDto) {
+
+        subjectExistValidation(bookDto.getBookSubject());
+
+        if (booksRepository.existsById(bookDto.getId())) {
+            Set<Author> authors = getAuthorsSet(bookDto.getAuthorsIds());
+            Book bookForUpdate = getBookForUpdate(bookDto);
+
+            return bookToBookDtoConverter.convertBookToBookResponseDto(bookForUpdate, dtoToAuthorConverter);
+        } else {
+
+            throw new NotFoundException("Book with id: " + bookDto.getId() + " not found");
+        }
     }
 
 
@@ -54,11 +67,11 @@ public class BookServices {
     }
 
     public BookResponseDto findBookById(Integer id) {
-        Optional<Book> foundBook = booksRepository.findById(Long.valueOf(id));
+        Optional<Book> foundBook = booksRepository.findById(id);
 
         if (foundBook.isPresent()) {
 
-            return bookToBookDtoConverter.convertBookToAddBookResponseDto(foundBook.get(), dtoToAuthorConverter);
+            return bookToBookDtoConverter.convertBookToBookResponseDto(foundBook.get(), dtoToAuthorConverter);
         } else {
             throw new NotFoundException("Book could not be found");
         }
@@ -99,7 +112,7 @@ public class BookServices {
 
     public List<BookResponseDto> findBooksByStatus(String status) {
 
-        BookStatus statusForSearch = getBookStatusFromString(status);
+        Book.BookStatus statusForSearch = getBookStatusFromString(status);
 
         List<Book> books = booksRepository.findByStatus(statusForSearch);
 
@@ -125,20 +138,67 @@ public class BookServices {
 
 // Private service methods
 
-    private static BookStatus getBookStatusFromString(String status) {
+    private Book getNewBook(AddBookRequestDto bookDto) {
+        String coverUrl = getCoverImageUriString(bookDto);
 
-        if (status.isBlank()) return BookStatus.AVAILABLE;
+        Book.BookStatus status = getBookStatusFromString(bookDto.getStatus());
 
-        return Arrays.stream(BookStatus.values())
+        BookSubject subject = subjectServices.findSubjectObjectByName(bookDto.getBookSubject());
+
+        Set<Author> authors = getAuthorsSet(bookDto.getAuthorsIds());
+
+        Book newBook = Book.builder()
+                .title(bookDto.getBookTitle())
+                .authors(authors)
+                .codeISBN(bookDto.getCodeISBN())
+                .status(status)
+                .subject(subject)
+                .coverageImageUrl(coverUrl)
+                .build();
+        return newBook;
+    }
+
+    private Book getBookForUpdate(UpdateBookRequestDto bookDto) {
+
+        Book.BookStatus status = getBookStatusFromString(bookDto.getStatus());
+
+        BookSubject subject = subjectServices.findSubjectObjectByName(bookDto.getBookSubject());
+
+        Set<Author> authors = getAuthorsSet(bookDto.getAuthorsIds());
+
+        Book newBook = Book.builder()
+                .bookId(bookDto.getId())
+                .title(bookDto.getBookTitle())
+                .authors(authors)
+                .codeISBN(bookDto.getCodeISBN())
+                .status(status)
+                .subject(subject)
+                .coverageImageUrl(bookDto.getCoverUrl())
+                .build();
+        return newBook;
+    }
+
+    private static String getCoverImageUriString(AddBookRequestDto bookDto) {
+        return UriComponentsBuilder.fromHttpUrl(UrlPaths.BOOK_COVER)
+                .path("{bookDto.getCodeISBN()}-L.jpg")
+                .buildAndExpand(bookDto.getCodeISBN())
+                .toUriString();
+    }
+
+    private static Book.BookStatus getBookStatusFromString(String status) {
+
+        if (status.isBlank()) return Book.BookStatus.AVAILABLE;
+
+        return Arrays.stream(Book.BookStatus.values())
                 .filter(objStatus -> objStatus.name().equalsIgnoreCase(status))
                 .findFirst()
-                .orElseThrow();
+                .orElseThrow(() -> new NotFoundException("Book status " + status + " not found"));
     }
 
     private void subjectExistValidation(String subjectName) {
 
         if (!subjectServices.checkIsSubjectExist(subjectName)) {
-            throw new IllegalArgumentException("Subject is not exist");
+            throw new IllegalArgumentException("Subject does not exist");
         }
     }
 
@@ -154,14 +214,14 @@ public class BookServices {
     private List<BookResponseDto> getBookResponseDtosFromBooksList(List<Book> foundBooks) {
 
         return foundBooks.stream()
-                .map(book -> bookToBookDtoConverter.convertBookToAddBookResponseDto(book, dtoToAuthorConverter))
+                .map(book -> bookToBookDtoConverter.convertBookToBookResponseDto(book, dtoToAuthorConverter))
                 .toList();
     }
 
 
-    private Set<Author> getAuthorsSet(AddBookRequestDto bookDto) {
+    private Set<Author> getAuthorsSet(List<Integer> autorIds) {
 
-        return bookDto.getAuthorsIds().stream()
+        return autorIds.stream()
                 .map(authorServices::findAuthorEntityById)
                 .collect(Collectors.toSet());
     }
