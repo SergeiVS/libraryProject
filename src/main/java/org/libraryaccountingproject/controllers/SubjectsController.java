@@ -38,7 +38,7 @@ public class SubjectsController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SubjectDto> getSubjectById(@PathVariable String id) {
+    public ResponseEntity<SubjectDto> getSubjectById(@PathVariable Integer id) {
         return new ResponseEntity<>(subjectServices.findSubjectById(id), HttpStatus.FOUND);
     }
 

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -50,8 +51,11 @@ public class SubjectServices {
 
     public SubjectDto findSubjectByName(String subject) {
 
-        if (repository.findBySubject(subject).isPresent()) {
-            SubjectDto dto = converter.convertSubjectToSubjectDto(repository.findBySubject(subject).get());
+        Optional<BookSubject> subjectOptional = repository.findBySubject(subject);
+
+        if (subjectOptional.isPresent()) {
+
+            SubjectDto dto = converter.convertSubjectToSubjectDto(subjectOptional.get());
 
             return dto;
 
@@ -82,6 +86,18 @@ public class SubjectServices {
         } else {
             throw new NotFoundException("No subjects found");
         }
+    }
+
+    public SubjectDto findSubjectById(Integer id) {
+
+        if (repository.existsById(id)) {
+
+            return converter.convertSubjectToSubjectDto(repository.findById(id).get());
+        } else {
+
+            throw new NotFoundException("Subject " + id + " not found");
+        }
+
     }
 
     public Boolean checkIsSubjectExist(String subjectName) {

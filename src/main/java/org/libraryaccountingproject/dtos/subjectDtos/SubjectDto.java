@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SubjectResponseDto {
+public class SubjectDto {
 
     private Integer subjectId;
     private String  bookSubject;
