@@ -5,15 +5,17 @@ import annotations.StringFormatValidation;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.libraryaccountingproject.dtos.authorDtos.AddUpdateAuthorRequestDto;
+import org.libraryaccountingproject.dtos.authorDtos.NewAuthorRequestDto;
 import org.libraryaccountingproject.dtos.authorDtos.AuthorDataResponseDto;
+import org.libraryaccountingproject.dtos.authorDtos.AuthorUpdateRequestDto;
 import org.libraryaccountingproject.entities.Author;
 import org.libraryaccountingproject.repositories.AuthorsRepository;
 import org.libraryaccountingproject.services.exeptions.AlreadyExistException;
-import org.libraryaccountingproject.services.exeptions.NotCreatedException;
 import org.libraryaccountingproject.services.exeptions.NotFoundException;
+import org.libraryaccountingproject.services.exeptions.RestException;
 import org.libraryaccountingproject.services.utils.converters.AuthorDtoToAuthorConverter;
 import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -28,38 +30,46 @@ public class AuthorServices {
     private final AuthorDtoToAuthorConverter dtoToAuthorConverter;
 
     @Transactional
-    public AuthorDataResponseDto addAuthor(AddUpdateAuthorRequestDto authorDto) {
 
-        if (authorsRepository.findByFirstNameAndLastName(authorDto.getFirstName(), authorDto.getLastName()).isEmpty()) {
+    public AuthorDataResponseDto addAuthor(NewAuthorRequestDto authorDto) {
+
+        if (authorsRepository.existsByFirstNameAndLastName(authorDto.getFirstName(), authorDto.getLastName())) {
 
             Author authorForSave = dtoToAuthorConverter.newAuthorRequestDtoToAuthor(authorDto);
-            Optional<Author> savedAuthor = Optional.ofNullable(authorsRepository.save(authorForSave));
 
-            if (savedAuthor.isPresent()) {
+            Author savedAuthor = authorsRepository.save(authorForSave);
 
-                return dtoToAuthorConverter.authorToAuthorResponseDto(savedAuthor.get());
-
-            } else {
-
-                throw new NotCreatedException("Author could not be created");
-            }
+            return dtoToAuthorConverter.authorToAuthorResponseDto(savedAuthor);
         } else {
-            throw new AlreadyExistException("Author already exists");
+            throw new RestException(HttpStatus.CONFLICT, "Author already exists");
         }
 
+    }
+
+    @Modifying(clearAutomatically = true)
+    public AuthorDataResponseDto updateAuthorData(AuthorUpdateRequestDto dto) {
+
+        if (authorsRepository.existsById(dto.getId())) {
+
+            Author author = authorsRepository.save(dtoToAuthorConverter.authorUpdateRequestDtoToAuthor(dto));
+
+            return dtoToAuthorConverter.authorToAuthorResponseDto(author);
+        } else {
+
+            throw new RestException(HttpStatus.CONFLICT, "Author with id: " + dto.getId() + " was not found");
+        }
     }
 
 
     public AuthorDataResponseDto findAuthorById(Integer id) {
 
-        Optional<Author> author = authorsRepository.findById(Long.valueOf(id));
+        Optional<Author> author = authorsRepository.findById(id);
 
         if (author.isPresent()) {
 
             return dtoToAuthorConverter.authorToAuthorResponseDto(author.get());
 
         } else {
-
             throw new NotFoundException("Author should not be found");
         }
 
@@ -83,7 +93,7 @@ public class AuthorServices {
     //Current method search by part names with String.contains()
     public List<AuthorDataResponseDto> findAuthorByFullname(@StringFormatValidation(groups = NameFormatValidation.class) String firstName,
                                                             @StringFormatValidation(groups = NameFormatValidation.class) String lastName) {
-        List<Author> foundAuthors = authorsRepository.findByFirstNameAndLastName(firstName, lastName);
+        List<Author> foundAuthors = authorsRepository.findByFirstNameContainingAndLastNameContaining(firstName, lastName);
 
         if (!foundAuthors.isEmpty()) {
 
@@ -112,28 +122,12 @@ public class AuthorServices {
 
     }
 
-    @Modifying(clearAutomatically = true)
-    public AuthorDataResponseDto updateAuthorData(@Valid AddUpdateAuthorRequestDto dto) {
-
-        Optional<Author> foundAuthor = authorsRepository.findById(Long.valueOf(dto.getId()));
-
-        if (foundAuthor.isPresent()) {
-
-            Author author = authorsRepository.save(dtoToAuthorConverter.newAuthorRequestDtoToAuthor(dto));
-
-            return dtoToAuthorConverter.authorToAuthorResponseDto(author);
-        } else {
-            throw new NotFoundException("Author with id: " + dto.getId() + " was not found");
-        }
-    }
-
     @Transactional
     public String deleteAuthorById(Integer id) {
-        Optional<Author> authorForDelete = authorsRepository.findById(Long.valueOf(id));
 
-        if (authorForDelete.isPresent()) {
+        if (authorsRepository.existsById(id)) {
 
-            authorsRepository.delete(authorForDelete.get());
+            authorsRepository.deleteById(id);
 
             return "Author with id: " + id + " was deleted";
 
@@ -144,7 +138,7 @@ public class AuthorServices {
 
     public Author findAuthorEntityById(Integer id) {
 
-        Optional<Author> foundAuthor = authorsRepository.findById(Long.valueOf(id));
+        Optional<Author> foundAuthor = authorsRepository.findById(id);
 
         if (foundAuthor.isPresent()) {
 
@@ -164,7 +158,6 @@ public class AuthorServices {
         authors.forEach(author -> dtos.add(dtoToAuthorConverter.authorToAuthorResponseDto(author)));
         return dtos;
     }
-
 
 
 }

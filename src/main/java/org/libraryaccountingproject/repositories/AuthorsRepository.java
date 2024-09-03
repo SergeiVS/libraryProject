@@ -17,13 +17,7 @@ public interface AuthorsRepository extends JpaRepository<Author, Integer> {
 
     List<Author> findByFirstNameContainingAndLastNameContaining(String firstName, String lastName);
 
-    default List<Author> findByFirstNameAndLastName(String firstName, String lastName) {
-
-        return findAll().stream()
-                .filter(author -> author.getFirstName().toLowerCase().contains(firstName))
-                .filter(author -> author.getLastName().toLowerCase().contains(lastName))
-                .toList();
-    };
+   void deleteById(int id);
 
     List<Author> findByFirstName(String firstName);
 
