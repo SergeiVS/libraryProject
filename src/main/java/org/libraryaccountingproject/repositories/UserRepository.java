@@ -10,17 +10,17 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
 
-    default Optional<User> findByEmail(String email) {
-        return findAll().stream()
-                .filter(user -> user.getUserEmail().equals(email))
-                .findFirst();
-    }
+    Optional<User> findById(int id);
 
-    default Optional<User> findByUserLogin(String login) {
-        return findAll().stream()
-                .filter(user-> user.getUserLogin().equals(login))
-                .findFirst();
-    }
+    Boolean existsById(int id);
+
+    Optional<User> findByUserLogin(String userLogin);
+
+    Boolean existsByUserLogin(String userLogin);
+
+    Boolean existsByEmail(String email);
+
+    Optional<User> findByEmail(String email);
 
     public List<User> findByFirstNameContainsAndLastNameContains(String firstName, String lastName);
 }

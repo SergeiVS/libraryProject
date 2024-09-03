@@ -8,10 +8,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface AuthorsRepository extends JpaRepository<Author, Long> {
+public interface AuthorsRepository extends JpaRepository<Author, Integer> {
 
 
+    Boolean existsById(int id);
 
+    Boolean existsByFirstNameAndLastName(String firstName, String lastName);
+
+    List<Author> findByFirstNameContainingAndLastNameContaining(String firstName, String lastName);
 
     default List<Author> findByFirstNameAndLastName(String firstName, String lastName) {
 
