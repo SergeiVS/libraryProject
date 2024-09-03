@@ -3,21 +3,30 @@ package org.libraryaccountingproject.entities;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.validator.constraints.ISBN;
+import org.hibernate.validator.constraints.URL;
 
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Data
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 
 public class Book {
+
+    public enum BookStatus {
+        AVAILABLE,
+        NOT_AVAILABLE,
+        OUT,
+        ORDERED;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,4 +56,26 @@ public class Book {
 
     @Enumerated(EnumType.STRING)
     private BookStatus status;
+
+    @NotBlank
+    @URL
+    private String coverageImageUrl;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getClass() : o.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
+        Book book = (Book) o;
+        return getBookId() != null && Objects.equals(getBookId(), book.getBookId());
+    }
+
+    @Override
+    public int hashCode() {
+        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getClass().hashCode() : Objects.hash(getBookId());
+    }
+
+
 }
