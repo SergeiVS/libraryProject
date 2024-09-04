@@ -1,10 +1,5 @@
 package org.libraryaccountingproject.services.utils.converters;
 
-import org.libraryaccountingproject.dtos.userDtos.NewUserRequestDto;
-import org.libraryaccountingproject.dtos.userDtos.UpdateUserRequestDto;
-import org.libraryaccountingproject.dtos.userDtos.UserDataResponseDto;
-import org.libraryaccountingproject.entities.User;
-import org.libraryaccountingproject.services.UserRoleServices;
 import org.springframework.stereotype.Component;
 
 @Component

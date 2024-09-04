@@ -49,8 +49,8 @@ public class BookServices {
         subjectExistValidation(bookDto.getBookSubject());
 
         if (booksRepository.existsById(bookDto.getId())) {
-            Set<Author> authors = getAuthorsSet(bookDto.getAuthorsIds());
-            Book bookForUpdate = getBookForUpdate(bookDto);
+
+            Book bookForUpdate = booksRepository.save(getBookForUpdate(bookDto));
 
             return bookToBookDtoConverter.convertBookToBookResponseDto(bookForUpdate, dtoToAuthorConverter);
         } else {
@@ -63,10 +63,12 @@ public class BookServices {
     public List<BookResponseDto> findAllBooks() {
 
         List<Book> books = booksRepository.findAll();
+
         return getBookResponseDtosFromBooksList(books);
     }
 
     public BookResponseDto findBookById(Integer id) {
+
         Optional<Book> foundBook = booksRepository.findById(id);
 
         if (foundBook.isPresent()) {
@@ -80,7 +82,7 @@ public class BookServices {
 
     public List<BookResponseDto> findBooksByPartTitle(String title) {
 
-        List<Book> foundBooks = booksRepository.findByPartTitle(title);
+        List<Book> foundBooks = booksRepository.findByTitleContaining(title);
 
         return getBookResponseDtoList(foundBooks);
     }
@@ -90,16 +92,16 @@ public class BookServices {
 
         subjectExistValidation(subjectName);
 
-        List<Book> foundBooks = booksRepository.findBySubjectName(subjectName);
+        List<Book> foundBooks = booksRepository.findBySubject(subjectServices.findSubjectObjectByName(subjectName));
 
         return getBookResponseDtoList(foundBooks);
 
     }
 
 
-    public List<BookResponseDto> findBooksByAuthor(Integer authorId) {
+    public List<BookResponseDto> findBooksByAuthorId(Integer authorId) {
 
-        List<Book> foundBooks = booksRepository.findByAuthorId(authorId);
+        List<Book> foundBooks = booksRepository.findByAuthorsId(authorId);
 
         if (!foundBooks.isEmpty()) {
 
@@ -111,6 +113,7 @@ public class BookServices {
     }
 
     public List<BookResponseDto> findBooksByStatus(String status) {
+
 
         Book.BookStatus statusForSearch = getBookStatusFromString(status);
 
@@ -125,7 +128,7 @@ public class BookServices {
 
     public List<BookResponseDto> findBooksByISBN(String isbn) {
 
-        List<Book> foundBooks = booksRepository.findByISBN(isbn);
+        List<Book> foundBooks = booksRepository.findByCodeISBN(isbn);
 
         if (!foundBooks.isEmpty()) {
 

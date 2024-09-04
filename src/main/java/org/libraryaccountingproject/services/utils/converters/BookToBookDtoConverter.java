@@ -23,6 +23,7 @@ public class BookToBookDtoConverter {
 
     public BookResponseDto convertBookToBookResponseDto(Book book, AuthorDtoToAuthorConverter converter) {
 
+
         Integer id = book.getBookId();
         String bookTitle = book.getTitle();
         String codeISBN = book.getCodeISBN();
@@ -36,13 +37,10 @@ public class BookToBookDtoConverter {
 
 
     private List<AuthorDataResponseDto> getAuthorDataResponseDtos(Book book, AuthorDtoToAuthorConverter converter) {
-        List<AuthorDataResponseDto> authors = new ArrayList<>();
-        book.getAuthors()
-                .forEach(author -> {
-                    AuthorDataResponseDto authorDto = converter.authorToAuthorResponseDto(author);
-                    authors.add(authorDto);
-                });
-        return authors;
+
+        return book.getAuthors().stream()
+                .map(converter::authorToAuthorResponseDto)
+                .toList();
     }
 
 }

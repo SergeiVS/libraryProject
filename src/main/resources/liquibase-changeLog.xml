@@ -12,6 +12,7 @@
             <column name="id" type="int" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
+
             <column name="subject" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
@@ -22,7 +23,7 @@
     <changeSet id="fill-default-values-into-book=subject-table" author="sergei_vs">
 
         <insert tableName="book_subject">
-            <column name="subject" value="Computer sience"/>
+            <column name="subject" value="Computer science"/>
         </insert>
 
         <insert tableName="book_subject">
@@ -35,39 +36,33 @@
 
     </changeSet>
 
-    <changeSet id="create-user-role-table" author="sergei_vs">
-        <createTable tableName="user_role">
+    <changeSet id="create-confirmation-table" author="SergeiVS">
 
-            <column name="id" type="int" autoIncrement="true">
+        <createTable tableName="confirmation">
+
+            <column name="id" type="INT" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
 
-            <column name="role_name" type="varchar(50)">
+            <column name="code_message" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
 
+            <column name="user_id" type="INT">
+                <constraints nullable="false" unique="false"/>
+            </column>
+
+            <column name="expired_at" type="java.sql.Types.DATETIME">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
-    </changeSet>
-
-    <changeSet id="fill-user-role-table-with-default-values" author="sergei_vs">
-
-        <insert tableName="user_role">
-            <column name="role_name" value="ADMIN"/>
-        </insert>
-
-        <insert tableName="user_role">
-            <column name="role_name" value="READER"/>
-        </insert>
-
-        <insert tableName="user_role">
-            <column name="role_name" value="LIBRARIAN"/>
-        </insert>
 
     </changeSet>
+
 
     <changeSet id="create-users-table" author="sergei_vs">
-        <createTable tableName="user">
-            <column name="user_id" type="int" autoIncrement="true">
+        <createTable tableName="account">
+            <column name="id" type="int" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
             <column name="first_name" type="varchar(50)">
@@ -82,24 +77,52 @@
             <column name="password" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="user_email" type="varchar(50)">
+            <column name="email" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="role_id" type="varchar(50)">
+            <column name="user_role" type="varchar(50)">
                 <constraints nullable="false"/>
+            </column>
+            <column name="user_state" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="confirmations" type="INT">
             </column>
         </createTable>
+        <addForeignKeyConstraint baseTableName="confirmation" baseColumnNames="user_id"
+                                 constraintName="fk_user_confirmation_id"
+                                 referencedTableName="account"
+                                 referencedColumnNames="id"/>
     </changeSet>
 
+
     <changeSet id="fill-user-table-with-default-values" author="sergei_vs">
-        <insert tableName="user">
+        <insert tableName="account">
             <column name="first_name" value="John"/>
             <column name="last_name" value="Doe"/>
             <column name="user_login" value="JohnDoe"/>
-            <column name="password" value="John123Doe"/>
-            <column name="user_email" value="j.doe@company.com"/>
-            <column name="role_id" value="1"/>
+            <column name="password" value="John123@Doe"/>
+            <column name="email" value="j.doe@company.com"/>
+            <column name="user_role" value="ADMIN"/>
+            <column name="user_state" value="CONFIRMED"/>
+        </insert>
+
+    </changeSet>
+
+    <changeSet id="fill-confirmation-table-with-default-value" author="SergeiVS">
+        <insert tableName="confirmation">
+            <column name="code_message" value="admin_confirmed"/>
+            <column name="expired_at" value="1970-01-01 00:00:01.000000"/>
+            <column name="user_id" value="1"/>
         </insert>
     </changeSet>
+
+    <changeSet id="insert-confirmation-into-user" author="SergeiVS">
+        <update tableName="account">
+            <column name="confirmations" value="1"/>
+            <where>id="1"</where>
+        </update>
+    </changeSet>
+
 
 </databaseChangeLog>

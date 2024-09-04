@@ -1,4 +1,4 @@
 package org.libraryaccountingproject.services;
 
-public class UserServices {
+public class ConfirmationMessageServices {
 }

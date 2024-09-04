@@ -9,6 +9,7 @@ import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Setter
@@ -16,6 +17,8 @@ import java.util.Objects;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
+@Table(name = "account")
 public class User {
 
     public enum UserRole {
@@ -24,9 +27,16 @@ public class User {
         LIBRARIAN
     }
 
+    public enum UserState {
+        REGISTERED,
+        CONFIRMED,
+        RESTRICTED,
+        DELETED
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer userId;
+    private Integer Id;
     @NotBlank
     @Column(nullable = false)
     private String firstName;
@@ -42,10 +52,17 @@ public class User {
     @NotBlank
     @Email
     @Column(unique = true)
-    private String userEmail;
+    private String email;
     @NotBlank
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
+    @NotBlank
+    @Enumerated(EnumType.STRING)
+    private UserState userState;
+    @OneToMany(mappedBy = "user")
+    @Column(name = "confirmations")
+    private Set<ConformationMessage> conformationMessage;
+
 
     @Override
     public boolean equals(Object o) {
@@ -55,12 +72,12 @@ public class User {
         Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getClass() : o.getClass();
         if (oEffectiveClass != thisEffectiveClass) return false;
         User user = (User) o;
-        return getUserId() != null && Objects.equals(getUserId(), user.getUserId());
+        return getId() != null && Objects.equals(getId(), user.getId());
     }
 
     @Override
     public int hashCode() {
-        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getClass().hashCode() : getUserId().hashCode();
+        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getClass().hashCode() : getId().hashCode();
     }
 
 
