@@ -33,7 +33,7 @@ public class AuthorServices {
 
     public AuthorDataResponseDto addAuthor(NewAuthorRequestDto authorDto) {
 
-        if (authorsRepository.existsByFirstNameAndLastName(authorDto.getFirstName(), authorDto.getLastName())) {
+        if (!authorsRepository.existsByFirstNameAndLastName(authorDto.getFirstName(), authorDto.getLastName())) {
 
             Author authorForSave = dtoToAuthorConverter.newAuthorRequestDtoToAuthor(authorDto);
 
@@ -41,6 +41,7 @@ public class AuthorServices {
 
             return dtoToAuthorConverter.authorToAuthorResponseDto(savedAuthor);
         } else {
+
             throw new RestException(HttpStatus.CONFLICT, "Author already exists");
         }
 
@@ -49,30 +50,28 @@ public class AuthorServices {
     @Modifying(clearAutomatically = true)
     public AuthorDataResponseDto updateAuthorData(AuthorUpdateRequestDto dto) {
 
-        if (authorsRepository.existsById(dto.getId())) {
+        Author author = authorsRepository
+                .findById(dto.getId())
+                .orElseThrow(() -> new RestException(HttpStatus.CONFLICT, "Author with id: " + dto.getId() + " was not found"));
 
-            Author author = authorsRepository.save(dtoToAuthorConverter.authorUpdateRequestDtoToAuthor(dto));
-
-            return dtoToAuthorConverter.authorToAuthorResponseDto(author);
-        } else {
-
-            throw new RestException(HttpStatus.CONFLICT, "Author with id: " + dto.getId() + " was not found");
+        if (!dto.getFirstName().isBlank()) {
+            author.setFirstName(dto.getFirstName());
         }
+
+        if (!dto.getLastName().isBlank()) {
+            author.setLastName(dto.getLastName());
+        }
+        return dtoToAuthorConverter.authorToAuthorResponseDto(author);
     }
 
 
     public AuthorDataResponseDto findAuthorById(Integer id) {
 
-        Optional<Author> author = authorsRepository.findById(id);
+        Author author = authorsRepository
+                .findById(id)
+                .orElseThrow(() -> new NotFoundException("Author should not be found"));
 
-        if (author.isPresent()) {
-
-            return dtoToAuthorConverter.authorToAuthorResponseDto(author.get());
-
-        } else {
-            throw new NotFoundException("Author should not be found");
-        }
-
+        return dtoToAuthorConverter.authorToAuthorResponseDto(author);
     }
 
 
@@ -83,7 +82,6 @@ public class AuthorServices {
         if (!authors.isEmpty()) {
 
             return getAuthorDataResponseDtos(authors);
-
         } else {
 
             throw new NotFoundException("Authors should not be found");
@@ -93,14 +91,13 @@ public class AuthorServices {
     //Current method search by part names with String.contains()
     public List<AuthorDataResponseDto> findAuthorByFullname(@StringFormatValidation(groups = NameFormatValidation.class) String firstName,
                                                             @StringFormatValidation(groups = NameFormatValidation.class) String lastName) {
+
         List<Author> foundAuthors = authorsRepository.findByFirstNameContainingAndLastNameContaining(firstName, lastName);
 
         if (!foundAuthors.isEmpty()) {
 
             return getAuthorDataResponseDtos(foundAuthors);
-
         } else {
-
             throw new NotFoundException("Author with name: " + firstName + " " + lastName + " was not found");
         }
 
@@ -118,8 +115,6 @@ public class AuthorServices {
 
             throw new NotFoundException("Authors should not be found");
         }
-
-
     }
 
     @Transactional
@@ -138,17 +133,14 @@ public class AuthorServices {
 
     public Author findAuthorEntityById(Integer id) {
 
-        Optional<Author> foundAuthor = authorsRepository.findById(id);
+        Author foundAuthor = authorsRepository
+                .findById(id)
+                .orElseThrow(() -> new NotFoundException("Author with id: " + id + " was not found"));
 
-        if (foundAuthor.isPresent()) {
-
-            return foundAuthor.get();
-
-        } else {
-            throw new NotFoundException("Author with id: " + id + " was not found");
-        }
-
+        return foundAuthor;
     }
+
+    // Private service methods
 
 
     private List<AuthorDataResponseDto> getAuthorDataResponseDtos(List<Author> authors) {

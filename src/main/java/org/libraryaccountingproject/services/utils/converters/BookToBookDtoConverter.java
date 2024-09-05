@@ -21,13 +21,12 @@ public class BookToBookDtoConverter {
 
 
 
-    public BookResponseDto convertBookToBookResponseDto(Book book, AuthorDtoToAuthorConverter converter) {
+    public BookResponseDto convertBookToBookResponseDto(Book book, Set<AuthorDataResponseDto> authors) {
 
 
         Integer id = book.getBookId();
         String bookTitle = book.getTitle();
         String codeISBN = book.getCodeISBN();
-        List<AuthorDataResponseDto> authors = getAuthorDataResponseDtos(book, converter);
         String subject = book.getSubject().getSubject();
         Book.BookStatus status = book.getStatus();
         String coverImageUrl = book.getCoverageImageUrl();

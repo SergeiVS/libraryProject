@@ -3,6 +3,7 @@ package org.libraryaccountingproject.services;
 import constatnts.UrlPaths;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.libraryaccountingproject.dtos.authorDtos.AuthorDataResponseDto;
 import org.libraryaccountingproject.dtos.bookDtos.AddBookRequestDto;
 import org.libraryaccountingproject.dtos.bookDtos.BookResponseDto;
 import org.libraryaccountingproject.dtos.bookDtos.UpdateBookRequestDto;
@@ -39,7 +40,9 @@ public class BookServices {
 
         Book savedBook = booksRepository.save(newBook);
 
-        return bookToBookDtoConverter.convertBookToBookResponseDto(savedBook, dtoToAuthorConverter);
+        Set<AuthorDataResponseDto> authors = getAuthorDataResponseDtos(savedBook.getAuthors());
+
+        return bookToBookDtoConverter.convertBookToBookResponseDto(savedBook, authors);
 
     }
 
@@ -51,8 +54,9 @@ public class BookServices {
         if (booksRepository.existsById(bookDto.getId())) {
 
             Book bookForUpdate = booksRepository.save(getBookForUpdate(bookDto));
+            Set<AuthorDataResponseDto> authors = getAuthorDataResponseDtos(bookForUpdate.getAuthors());
 
-            return bookToBookDtoConverter.convertBookToBookResponseDto(bookForUpdate, dtoToAuthorConverter);
+            return bookToBookDtoConverter.convertBookToBookResponseDto(bookForUpdate, authors);
         } else {
 
             throw new NotFoundException("Book with id: " + bookDto.getId() + " not found");
@@ -69,14 +73,14 @@ public class BookServices {
 
     public BookResponseDto findBookById(Integer id) {
 
-        Optional<Book> foundBook = booksRepository.findById(id);
+        Book foundBook = booksRepository
+                .findById(id)
+                .orElseThrow(() -> new NotFoundException("Book with id: " + id + " not found"));
 
-        if (foundBook.isPresent()) {
+        Set<AuthorDataResponseDto> authorsDtosSet = getAuthorDataResponseDtos(foundBook.getAuthors());
 
-            return bookToBookDtoConverter.convertBookToBookResponseDto(foundBook.get(), dtoToAuthorConverter);
-        } else {
-            throw new NotFoundException("Book could not be found");
-        }
+        return bookToBookDtoConverter.convertBookToBookResponseDto(foundBook, authorsDtosSet);
+
     }
 
 
@@ -131,7 +135,6 @@ public class BookServices {
         List<Book> foundBooks = booksRepository.findByCodeISBN(isbn);
 
         if (!foundBooks.isEmpty()) {
-
             return getBookResponseDtoList(foundBooks);
         } else {
             throw new NotFoundException("No books of ISBN " + isbn + " found");
@@ -141,16 +144,20 @@ public class BookServices {
 
 // Private service methods
 
+    private Set<AuthorDataResponseDto> getAuthorDataResponseDtos(Set<Author> authors) {
+        return authors.stream()
+                .map(dtoToAuthorConverter::authorToAuthorResponseDto)
+                .collect(Collectors.toSet());
+    }
+
     private Book getNewBook(AddBookRequestDto bookDto) {
+
         String coverUrl = getCoverImageUriString(bookDto);
-
         Book.BookStatus status = getBookStatusFromString(bookDto.getStatus());
-
         BookSubject subject = subjectServices.findSubjectObjectByName(bookDto.getBookSubject());
-
         Set<Author> authors = getAuthorsSet(bookDto.getAuthorsIds());
 
-        Book newBook = Book.builder()
+        return Book.builder()
                 .title(bookDto.getBookTitle())
                 .authors(authors)
                 .codeISBN(bookDto.getCodeISBN())
@@ -158,27 +165,20 @@ public class BookServices {
                 .subject(subject)
                 .coverageImageUrl(coverUrl)
                 .build();
-        return newBook;
     }
 
     private Book getBookForUpdate(UpdateBookRequestDto bookDto) {
 
-        Book.BookStatus status = getBookStatusFromString(bookDto.getStatus());
+        Book bookForUpdate = booksRepository.findById(bookDto.getId())
+                .orElseThrow(() -> new NotFoundException("Book with id: " + bookDto.getId() + " not found"));
 
-        BookSubject subject = subjectServices.findSubjectObjectByName(bookDto.getBookSubject());
-
-        Set<Author> authors = getAuthorsSet(bookDto.getAuthorsIds());
-
-        Book newBook = Book.builder()
-                .bookId(bookDto.getId())
-                .title(bookDto.getBookTitle())
-                .authors(authors)
-                .codeISBN(bookDto.getCodeISBN())
-                .status(status)
-                .subject(subject)
-                .coverageImageUrl(bookDto.getCoverUrl())
-                .build();
-        return newBook;
+        if (!bookDto.getBookSubject().isBlank()) {
+            bookForUpdate.setSubject(subjectServices.findSubjectObjectByName(bookDto.getBookSubject()));
+        }
+        if (bookDto.getStatus().isBlank()) {
+            bookForUpdate.setStatus(getBookStatusFromString(bookDto.getStatus()));
+        }
+        return bookForUpdate;
     }
 
     private static String getCoverImageUriString(AddBookRequestDto bookDto) {
@@ -190,12 +190,10 @@ public class BookServices {
 
     private static Book.BookStatus getBookStatusFromString(String status) {
 
-        if (status.isBlank()) return Book.BookStatus.AVAILABLE;
-
         return Arrays.stream(Book.BookStatus.values())
                 .filter(objStatus -> objStatus.name().equalsIgnoreCase(status))
                 .findFirst()
-                .orElseThrow(() -> new NotFoundException("Book status " + status + " not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Book status " + status + " does not exist"));
     }
 
     private void subjectExistValidation(String subjectName) {
@@ -217,14 +215,17 @@ public class BookServices {
     private List<BookResponseDto> getBookResponseDtosFromBooksList(List<Book> foundBooks) {
 
         return foundBooks.stream()
-                .map(book -> bookToBookDtoConverter.convertBookToBookResponseDto(book, dtoToAuthorConverter))
+                .map(book -> {
+                    Set<AuthorDataResponseDto> authors = getAuthorDataResponseDtos(book.getAuthors());
+                    return bookToBookDtoConverter.convertBookToBookResponseDto(book, authors);
+                })
                 .toList();
     }
 
 
-    private Set<Author> getAuthorsSet(List<Integer> autorIds) {
+    private Set<Author> getAuthorsSet(List<Integer> authorIds) {
 
-        return autorIds.stream()
+        return authorIds.stream()
                 .map(authorServices::findAuthorEntityById)
                 .collect(Collectors.toSet());
     }

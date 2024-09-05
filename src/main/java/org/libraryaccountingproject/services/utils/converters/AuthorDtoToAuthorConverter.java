@@ -18,17 +18,6 @@ public class AuthorDtoToAuthorConverter {
 
     }
 
-    public Author authorUpdateRequestDtoToAuthor(@Valid AuthorUpdateRequestDto dto) {
-        return Author.builder()
-                .id(dto.getId())
-                .firstName(dto.getFirstName())
-                .lastName(dto.getLastName())
-                .build();
-
-    }
-
-
-
     public AuthorDataResponseDto authorToAuthorResponseDto(Author author) {
         return new AuthorDataResponseDto(author.getId(), author.getFirstName(), author.getLastName());
     }

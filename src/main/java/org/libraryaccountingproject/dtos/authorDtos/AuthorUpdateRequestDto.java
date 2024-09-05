@@ -2,6 +2,7 @@ package org.libraryaccountingproject.dtos.authorDtos;
 
 import annotations.NameFormatValidation;
 import annotations.StringFormatValidation;
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
@@ -16,12 +17,12 @@ public class AuthorUpdateRequestDto {
     @Positive
     Integer id;
 
-    @NotBlank(message = "Firstname could not be empty")
+    @Nullable
     @Size(min = 3, max = 25, message = "Firstname length could be between 3 and 25 characters")
     @StringFormatValidation(groups = NameFormatValidation.class)
     private String firstName;
 
-    @NotBlank(message = "Lastname could not be empty")
+    @Nullable
     @Size(min = 3, max = 25, message = "Lastname length could be between 3 and 25 characters")
     @StringFormatValidation(groups = NameFormatValidation.class)
     private String lastName;

@@ -8,6 +8,7 @@ import org.libraryaccountingproject.entities.Book;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Set;
 
 @Component
 @Data
@@ -16,7 +17,7 @@ import java.util.List;
 public class BookResponseDto {
     private Integer id;
     private String bookTitle;
-    private List<AuthorDataResponseDto> authors;
+    private Set<AuthorDataResponseDto> authors;
     private String codeISBN;
     private String bookSubject;
     private String bookStatus;

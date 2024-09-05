@@ -26,10 +26,10 @@ public class SubjectServices {
     @Transactional
     public SubjectDto addNewSubject(String subject) {
 
-        if (repository.existsBySubject(subject)) {
-
-            BookSubject bookSubject = new BookSubject();
-            bookSubject.setSubject(subject);
+        if (!repository.existsBySubject(subject)) {
+            BookSubject bookSubject = BookSubject.builder()
+                    .subject(subject)
+                    .build();
             BookSubject savedSubject = repository.save(bookSubject);
 
             return converter.convertSubjectToSubjectDto(savedSubject);
@@ -38,10 +38,11 @@ public class SubjectServices {
         }
     }
 
+
     @Transactional
     public SubjectDto updateSubject(SubjectDto subjectDto) {
-        if (repository.existsById(subjectDto.getSubjectId())) {
 
+        if (repository.existsById(subjectDto.getSubjectId())) {
             BookSubject bookSubject = repository.save(converter.convertSubjectDtoToBookSubject(subjectDto));
             return converter.convertSubjectToSubjectDto(bookSubject);
         } else {
@@ -51,35 +52,25 @@ public class SubjectServices {
 
     public SubjectDto findSubjectByName(String subject) {
 
-        Optional<BookSubject> subjectOptional = repository.findBySubject(subject);
+        BookSubject subjectOptional = repository.findBySubject(subject)
+                .orElseThrow(() -> new NotFoundException(subject));
 
-        if (subjectOptional.isPresent()) {
+        return converter.convertSubjectToSubjectDto(subjectOptional);
 
-            SubjectDto dto = converter.convertSubjectToSubjectDto(subjectOptional.get());
-
-            return dto;
-
-        } else {
-            throw new NotFoundException("Subject " + subject + " not found");
-        }
     }
 
     public BookSubject findSubjectObjectByName(String subject) {
 
-        if (repository.existsBySubject(subject)) {
+        return repository.findBySubject(subject)
+                .orElseThrow(() -> new NotFoundException("Subject: " + subject + " does not exist"));
 
-            return repository.findBySubject(subject).get();
-
-        } else {
-            throw new NotFoundException("Subject " + subject + " not found");
-        }
     }
 
     public List<SubjectDto> findAllSubjects() {
 
         List<BookSubject> subjects = repository.findAll();
-        if (!subjects.isEmpty()) {
 
+        if (!subjects.isEmpty()) {
             return subjects.stream()
                     .map(converter::convertSubjectToSubjectDto)
                     .toList();
@@ -90,14 +81,8 @@ public class SubjectServices {
 
     public SubjectDto findSubjectById(Integer id) {
 
-        if (repository.existsById(id)) {
-
-            return converter.convertSubjectToSubjectDto(repository.findById(id).get());
-        } else {
-
-            throw new NotFoundException("Subject " + id + " not found");
-        }
-
+        return converter.convertSubjectToSubjectDto(repository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Subject: " + id + " does not exist")));
     }
 
     public Boolean checkIsSubjectExist(String subjectName) {

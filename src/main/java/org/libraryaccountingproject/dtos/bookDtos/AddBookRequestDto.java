@@ -24,7 +24,7 @@ public class AddBookRequestDto {
 
 
     @NotBlank(message = "Book title could not be empty")
-    @Size(min = 3,  message = "Book title length could be between 3 and 25 characters")
+    @Size(min = 3, message = "Book title length could be between 3 and 25 characters")
     private String bookTitle;
 
     @NotEmpty(message = "Authors set could not be empty")
@@ -38,6 +38,7 @@ public class AddBookRequestDto {
     @StringFormatValidation(groups = SubjectValidation.class)
     private String bookSubject;
 
+    @NotBlank
     private String status;
 
 }

@@ -14,6 +14,7 @@ import java.util.Objects;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class BookSubject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

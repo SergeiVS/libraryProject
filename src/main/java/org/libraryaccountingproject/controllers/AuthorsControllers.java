@@ -2,6 +2,7 @@ package org.libraryaccountingproject.controllers;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.libraryaccountingproject.dtos.authorDtos.NewAuthorRequestDto;
 import org.libraryaccountingproject.dtos.authorDtos.AuthorDataResponseDto;
 import org.libraryaccountingproject.dtos.authorDtos.AuthorUpdateRequestDto;
@@ -14,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/authors")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AuthorsControllers {
 
     private final AuthorServices authorServices;
