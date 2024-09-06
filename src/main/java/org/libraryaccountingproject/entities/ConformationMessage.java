@@ -1,12 +1,9 @@
 package org.libraryaccountingproject.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
-import org.hibernate.proxy.HibernateProxy;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 @Entity
 @Getter
