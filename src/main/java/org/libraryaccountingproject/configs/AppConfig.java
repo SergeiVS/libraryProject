@@ -1,4 +1,4 @@
-package configs;
+package org.libraryaccountingproject.configs;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
