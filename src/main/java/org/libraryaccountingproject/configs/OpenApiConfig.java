@@ -19,7 +19,7 @@ import org.springdoc.core.GroupedOpenApi;
         public GroupedOpenApi publicApi() {
             return GroupedOpenApi.builder()
                     .group("Public")
-                    .pathsToMatch("/public/**")
+                    .pathsToMatch("/api/public/**")
                     .build();
         }
 
@@ -27,7 +27,7 @@ import org.springdoc.core.GroupedOpenApi;
         public GroupedOpenApi privateApi() {
             return GroupedOpenApi.builder()
                     .group("Private")
-                    .pathsToMatch("/private/**")
+                    .pathsToMatch("/api/private/**")
                     .build();
         }
 

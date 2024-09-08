@@ -1,36 +1,31 @@
 package org.libraryaccountingproject.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.libraryaccountingproject.controllers.api.SubjectsAPI;
 import org.libraryaccountingproject.dtos.subjectDtos.SubjectDto;
 import org.libraryaccountingproject.services.SubjectServices;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
-@RequestMapping("api/subjects")
+@RequestMapping("api/private/subjects")
 @RequiredArgsConstructor
-public class SubjectsController {
+public class SubjectsController implements SubjectsAPI {
 
    private final SubjectServices subjectServices;
 
-    @PostMapping("/subject")
+    @PostMapping
     public ResponseEntity<SubjectDto> addNewSubject(@RequestParam String subject) {
         return new ResponseEntity<>(subjectServices.addNewSubject(subject), HttpStatus.CREATED);
     }
 
-    @PutMapping("/subject")
-    public ResponseEntity<SubjectDto> updateSubject(@RequestBody SubjectDto dto)
-    {
+    @PutMapping
+    public ResponseEntity<SubjectDto> updateSubject(@RequestBody SubjectDto dto){
         return new ResponseEntity<>(subjectServices.updateSubject(dto), HttpStatus.OK);
     }
 
-    @GetMapping
-    public ResponseEntity<List<SubjectDto>> getAllSubjects() {
-        return new ResponseEntity<>(subjectServices.findAllSubjects(), HttpStatus.FOUND);
-    }
 
     @GetMapping("/{subject}")
     public ResponseEntity<SubjectDto> getSubject(@PathVariable String subject) {

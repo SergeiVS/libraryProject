@@ -1,8 +1,8 @@
 package org.libraryaccountingproject.controllers;
 
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.libraryaccountingproject.controllers.api.AuthorsAPI;
 import org.libraryaccountingproject.dtos.authorDtos.NewAuthorRequestDto;
 import org.libraryaccountingproject.dtos.authorDtos.AuthorDataResponseDto;
 import org.libraryaccountingproject.dtos.authorDtos.AuthorUpdateRequestDto;
@@ -11,12 +11,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/api/authors")
+@RequestMapping("/api/private/authors/")
 @RequiredArgsConstructor
-public class AuthorsControllers {
+public class PrivateAuthorsControllers implements AuthorsAPI {
 
     private final AuthorServices authorServices;
 
@@ -31,10 +29,7 @@ public class AuthorsControllers {
         return new ResponseEntity<>(authorServices.updateAuthorData(dto),HttpStatus.OK);
     }
 
-    @GetMapping
-    public ResponseEntity<List<AuthorDataResponseDto>> getAllAuthors() {
-       return new ResponseEntity<>(authorServices.findAllAuthors(), HttpStatus.OK);
-    }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<AuthorDataResponseDto> getAuthorById(@PathVariable Integer id) {
@@ -46,14 +41,6 @@ public class AuthorsControllers {
 
         return new ResponseEntity<>(authorServices.deleteAuthorById(id), HttpStatus.OK);
     }
-    @GetMapping("/fullname")
-    public ResponseEntity<List<AuthorDataResponseDto>> getAuthorByFullName(@RequestParam String firstName, @RequestParam String lastName) {
-        return new ResponseEntity<>(authorServices.findAuthorByFullname(firstName, lastName), HttpStatus.FOUND) ;
-    }
 
-    @GetMapping("/{lastName}")
-    public ResponseEntity<List<AuthorDataResponseDto>> getAuthorByLastName(@PathVariable String lastName) {
-        return new ResponseEntity<>(authorServices.findAuthorsByLastName(lastName), HttpStatus.FOUND);
-    }
 
 }

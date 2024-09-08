@@ -6,7 +6,6 @@ import org.libraryaccountingproject.dtos.authorDtos.NewAuthorRequestDto;
 import org.libraryaccountingproject.dtos.authorDtos.AuthorDataResponseDto;
 import org.libraryaccountingproject.entities.Author;
 import org.libraryaccountingproject.repositories.AuthorsRepository;
-import org.libraryaccountingproject.services.utils.converters.AuthorDtoToAuthorConverter;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
@@ -17,7 +16,6 @@ class AuthorServicesTest {
 //    private AuthorServices authorServices;
 //    private AuthorsRepository authorsRepository;
 //    private Author author;
-//    private AuthorDtoToAuthorConverter converter = new AuthorDtoToAuthorConverter();
 //    private NewAuthorRequestDto requestDto;
 //    private AuthorDataResponseDto responseDto;
 //

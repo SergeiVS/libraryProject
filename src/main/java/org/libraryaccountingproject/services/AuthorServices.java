@@ -3,45 +3,44 @@ package org.libraryaccountingproject.services;
 import annotations.NameFormatValidation;
 import annotations.StringFormatValidation;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.libraryaccountingproject.dtos.authorDtos.NewAuthorRequestDto;
 import org.libraryaccountingproject.dtos.authorDtos.AuthorDataResponseDto;
 import org.libraryaccountingproject.dtos.authorDtos.AuthorUpdateRequestDto;
 import org.libraryaccountingproject.entities.Author;
 import org.libraryaccountingproject.repositories.AuthorsRepository;
-import org.libraryaccountingproject.services.exeptions.AlreadyExistException;
 import org.libraryaccountingproject.services.exeptions.NotFoundException;
 import org.libraryaccountingproject.services.exeptions.RestException;
-import org.libraryaccountingproject.services.utils.converters.AuthorDtoToAuthorConverter;
+import org.libraryaccountingproject.services.utils.mappers.AuthorMappers;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthorServices {
 
     private final AuthorsRepository authorsRepository;
-    private final AuthorDtoToAuthorConverter dtoToAuthorConverter;
+    private final AuthorMappers authorMappers;
 
     @Transactional
-
     public AuthorDataResponseDto addAuthor(NewAuthorRequestDto authorDto) {
 
         if (!authorsRepository.existsByFirstNameAndLastName(authorDto.getFirstName(), authorDto.getLastName())) {
 
-            Author authorForSave = dtoToAuthorConverter.newAuthorRequestDtoToAuthor(authorDto);
+            Author authorForSave = authorMappers.newAuthorFromNewAuthorRequestDto(authorDto);
 
             Author savedAuthor = authorsRepository.save(authorForSave);
 
-            return dtoToAuthorConverter.authorToAuthorResponseDto(savedAuthor);
+            return authorMappers.toAuthorDataResponseDto(savedAuthor);
         } else {
-
             throw new RestException(HttpStatus.CONFLICT, "Author already exists");
         }
 
@@ -54,14 +53,11 @@ public class AuthorServices {
                 .findById(dto.getId())
                 .orElseThrow(() -> new RestException(HttpStatus.CONFLICT, "Author with id: " + dto.getId() + " was not found"));
 
-        if (!dto.getFirstName().isBlank()) {
-            author.setFirstName(dto.getFirstName());
-        }
+        authorMappers.updateAuthorFromAuthorUpdateDto(author, dto);
 
-        if (!dto.getLastName().isBlank()) {
-            author.setLastName(dto.getLastName());
-        }
-        return dtoToAuthorConverter.authorToAuthorResponseDto(author);
+        Author savedAuthor = authorsRepository.save(author);
+
+        return authorMappers.toAuthorDataResponseDto(savedAuthor);
     }
 
 
@@ -71,7 +67,7 @@ public class AuthorServices {
                 .findById(id)
                 .orElseThrow(() -> new NotFoundException("Author should not be found"));
 
-        return dtoToAuthorConverter.authorToAuthorResponseDto(author);
+        return authorMappers.toAuthorDataResponseDto(author);
     }
 
 
@@ -82,18 +78,19 @@ public class AuthorServices {
         if (!authors.isEmpty()) {
 
             return getAuthorDataResponseDtos(authors);
-        } else {
 
+        } else {
             throw new NotFoundException("Authors should not be found");
         }
     }
 
     //Current method search by part names with String.contains()
+
     public List<AuthorDataResponseDto> findAuthorByFullname(@StringFormatValidation(groups = NameFormatValidation.class) String firstName,
                                                             @StringFormatValidation(groups = NameFormatValidation.class) String lastName) {
 
         List<Author> foundAuthors = authorsRepository.findByFirstNameContainingAndLastNameContaining(firstName, lastName);
-
+        log.info(foundAuthors.toString());
         if (!foundAuthors.isEmpty()) {
 
             return getAuthorDataResponseDtos(foundAuthors);
@@ -112,7 +109,6 @@ public class AuthorServices {
             return getAuthorDataResponseDtos(authors);
 
         } else {
-
             throw new NotFoundException("Authors should not be found");
         }
     }
@@ -131,13 +127,12 @@ public class AuthorServices {
         }
     }
 
-    public Author findAuthorEntityById(Integer id) {
+    public Set<Author> getAuthorsSetFromAuthorIdsList(List<Integer> authorIds) {
 
-        Author foundAuthor = authorsRepository
-                .findById(id)
-                .orElseThrow(() -> new NotFoundException("Author with id: " + id + " was not found"));
-
-        return foundAuthor;
+        return authorIds.stream()
+                .map(id -> authorsRepository.findById(id)
+                        .orElseThrow(() -> new NotFoundException("Author with id: " + id + " was not found")))
+                .collect(Collectors.toSet());
     }
 
     // Private service methods
@@ -147,7 +142,8 @@ public class AuthorServices {
 
         List<AuthorDataResponseDto> dtos = new ArrayList<>();
 
-        authors.forEach(author -> dtos.add(dtoToAuthorConverter.authorToAuthorResponseDto(author)));
+        authors.forEach(author -> dtos.add(authorMappers.toAuthorDataResponseDto(author)));
+
         return dtos;
     }
 

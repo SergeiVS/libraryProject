@@ -25,7 +25,7 @@ public class Book {
         AVAILABLE,
         NOT_AVAILABLE,
         OUT,
-        ORDERED;
+        ORDERED
     }
 
     @Id
@@ -59,7 +59,7 @@ public class Book {
 
     @NotBlank
     @URL
-    private String coverageImageUrl;
+    private String coverImageUrl;
 
     @Override
     public boolean equals(Object o) {

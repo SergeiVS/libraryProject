@@ -23,15 +23,15 @@
     <changeSet id="fill-default-values-into-book=subject-table" author="sergei_vs">
 
         <insert tableName="book_subject">
-            <column name="subject" value="Computer science"/>
+            <column name="subject" value="computer science"/>
         </insert>
 
         <insert tableName="book_subject">
-            <column name="subject" value="Classics"/>
+            <column name="subject" value="classics"/>
         </insert>
 
         <insert tableName="book_subject">
-            <column name="subject" value="Romans"/>
+            <column name="subject" value="romans"/>
         </insert>
 
     </changeSet>
