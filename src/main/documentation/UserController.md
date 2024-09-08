@@ -1,7 +1,11 @@
 PublicController(Available for unregistered user)
 @RequestMapping("/api/users")
+
 @PostMapping("/register)
 ResponseEntity<UserDataResponse> registerNewReaderByReader(@RequestBody NewUserRequestFromReader dto);
+
+@PostMapping("/login")
+ResponseEntity<UserDataResponse> loginUser(@RequestBody UserLoginRequest dto)
 
 ReaderController(Available for registered user)
 @RequestMapping("/api/users)
@@ -9,8 +13,7 @@ ReaderController(Available for registered user)
 @PostMapping("/confirmation")
 ResponseEntity<ConfirmedUserResponse> confirmRegistration(@RequestBody ConfirmationRequest dto)
 
-@PostMapping("/login")
-ResponseEntity<UserDataResponse> loginUser(@RequestBody UserLoginRequest dto)
+
 
 @PutMapping()
 ResponseEntity<UserResponseForReader> updateSelfDataByReader(@RequestBody ReaderDataSelfUpdateRequest dto)

@@ -21,11 +21,6 @@ import java.util.Set;
 @Table(name = "account")
 public class User {
 
-    public enum UserRole {
-        ADMIN,
-        READER,
-        LIBRARIAN
-    }
 
     public enum UserState {
         REGISTERED,
