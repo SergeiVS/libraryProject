@@ -42,7 +42,8 @@ public interface PublicAPI {
     ResponseEntity<List<SubjectDto>> getAllSubjects();
 
 
-//    @GetMapping("/books/{authorLastName}")
-//    public ResponseEntity<List<BookResponseDto>> getBooksByIsbn( @PathVariable String authorLastName);
+//    @GetMapping("/books/author")
+//    public ResponseEntity<List<BookResponseDto>> getBooksByAuthorLastName(@NotBlank(message = "Request could not be empty") @RequestParam String authorLastName);
+
 
 }

@@ -56,7 +56,7 @@ public class User {
     private UserState userState;
     @OneToMany(mappedBy = "user")
     @Column(name = "confirmations")
-    private Set<ConformationMessage> conformationMessage;
+    private Set<ConfirmationMessage> confirmationMessage;
 
 
     @Override

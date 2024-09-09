@@ -67,9 +67,10 @@ public class PublicControllers implements PublicAPI {
     public ResponseEntity<List<SubjectDto>> getAllSubjects() {
         return new ResponseEntity<>(subjectServices.findAllSubjects(), HttpStatus.FOUND);
     }
-//    @GetMapping("/books/{authorLastName}")
-//    public ResponseEntity<List<BookResponseDto>> getBooksByIsbn( @PathVariable String authorLastName) {
-//        return new ResponseEntity<>(bookServices., HttpStatus.FOUND);
+
+//    @GetMapping("/books/author")
+//    public ResponseEntity<List<BookResponseDto>> getBooksByAuthorLastName(@NotBlank(message = "Request could not be empty") @RequestParam String authorLastName) {
+//        return new ResponseEntity<>(bookServices.findBooksByAuthorLastName(authorLastName), HttpStatus.FOUND);
 //    }
 
 }
