@@ -3,14 +3,19 @@ package org.libraryaccountingproject.dtos.authorDtos;
 import annotations.NameFormatValidation;
 import annotations.StringFormatValidation;
 import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class AuthorUpdateRequestDto {
 
     @NotNull
@@ -26,4 +31,6 @@ public class AuthorUpdateRequestDto {
     @Size(min = 3, max = 25, message = "Lastname length could be between 3 and 25 characters")
     @StringFormatValidation(groups = NameFormatValidation.class)
     private String lastName;
+
+
 }

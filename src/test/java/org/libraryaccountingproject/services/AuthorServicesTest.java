@@ -3,6 +3,7 @@ package org.libraryaccountingproject.services;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.libraryaccountingproject.dtos.authorDtos.AuthorUpdateRequestDto;
 import org.libraryaccountingproject.dtos.authorDtos.NewAuthorRequestDto;
 import org.libraryaccountingproject.dtos.authorDtos.AuthorDataResponseDto;
 import org.libraryaccountingproject.entities.Author;
@@ -11,6 +12,8 @@ import org.libraryaccountingproject.services.exeptions.RestException;
 import org.libraryaccountingproject.services.utils.mappers.AuthorMappers;
 import org.libraryaccountingproject.services.utils.mappers.AuthorMappersImpl;
 import org.mockito.Mock;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -24,6 +27,8 @@ class AuthorServicesTest {
     private AuthorsRepository authorsRepository;
     private Author author;
     private NewAuthorRequestDto requestDto;
+    private AuthorUpdateRequestDto updateRequestDto;
+    private AuthorDataResponseDto responseDto;
     private final AuthorMappers mappers = new AuthorMappersImpl();
 
 
@@ -35,17 +40,17 @@ class AuthorServicesTest {
         author.setLastName("Doe");
         authorsRepository = mock(AuthorsRepository.class);
         when(authorsRepository.save(any())).thenReturn(author);
-
+        updateRequestDto = new AuthorUpdateRequestDto(author.getId(), author.getFirstName(), author.getLastName());
         authorServices = new AuthorServices(authorsRepository, mappers);
         requestDto = new NewAuthorRequestDto("John", "Doe");
-
+        responseDto = mappers.toAuthorDataResponseDto(author);
     }
 
 
     @Test
     void addAuthorSuccess() {
 
-        AuthorDataResponseDto responseDto = mappers.toAuthorDataResponseDto(author);
+
         when(authorsRepository.existsByFirstNameAndLastName(any(), any())).thenReturn(false);
 
         assertEquals(responseDto, authorServices.addAuthor(requestDto), "Expected: " + responseDto + " Real: " + authorServices.addAuthor(requestDto));
@@ -55,9 +60,16 @@ class AuthorServicesTest {
     void addAuthorAlreadyExistsException() {
 
         when(authorsRepository.existsByFirstNameAndLastName(any(), any())).thenReturn(true);
-        assertThrows(RestException.class, () -> authorServices.addAuthor(requestDto));
+        assertThrowsExactly(RestException.class, () -> authorServices.addAuthor(requestDto));
+
     }
 
 
+    @Test
+    void updateAuthorData() {
+        when(authorsRepository.findById(any())).thenReturn(Optional.of(author));
+        assertEquals(responseDto, authorServices.addAuthor(requestDto), "Expected: " + responseDto + " Real: " + authorServices.addAuthor(requestDto));
+
+    }
 }
 
