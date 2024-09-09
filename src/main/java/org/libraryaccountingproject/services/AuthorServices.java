@@ -135,6 +135,10 @@ public class AuthorServices {
                 .collect(Collectors.toSet());
     }
 
+    public boolean authorExistById(Integer id) {
+        return authorsRepository.existsById(id);
+    }
+
     // Private service methods
 
 

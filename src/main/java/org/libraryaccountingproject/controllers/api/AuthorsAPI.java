@@ -1,6 +1,7 @@
 package org.libraryaccountingproject.controllers.api;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import org.libraryaccountingproject.dtos.authorDtos.AuthorDataResponseDto;
 import org.libraryaccountingproject.dtos.authorDtos.AuthorUpdateRequestDto;
 import org.libraryaccountingproject.dtos.authorDtos.NewAuthorRequestDto;
@@ -19,7 +20,7 @@ public interface AuthorsAPI {
 
 
     @GetMapping("/{id}")
-    ResponseEntity<AuthorDataResponseDto> getAuthorById(@PathVariable Integer id);
+    ResponseEntity<AuthorDataResponseDto> getAuthorById(@PathVariable @Positive(message = "id should be a positive number") Integer id);
 
     @DeleteMapping("/{id}")
     ResponseEntity<String> deleteAuthor(@PathVariable Integer id);

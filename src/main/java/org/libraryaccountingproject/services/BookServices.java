@@ -93,6 +93,8 @@ public class BookServices {
 
     public List<BookResponseDto> findBooksByAuthorId(Integer authorId) {
 
+        checkAuthorExistById(authorId);
+
         List<Book> foundBooks = booksRepository.findByAuthorsId(authorId);
 
         return getBookResponseDtoList(foundBooks);
@@ -127,6 +129,11 @@ public class BookServices {
 
 // Private service methods
 
+    private void checkAuthorExistById(Integer id) {
+        if (!authorServices.authorExistById(id)) {
+            throw new NotFoundException("Author with id: " + id + " not found");
+        }
+    }
 
     private Book getNewBook(AddBookRequestDto bookDto) {
 

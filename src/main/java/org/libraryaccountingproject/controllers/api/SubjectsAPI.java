@@ -14,8 +14,8 @@ public interface SubjectsAPI {
     @PutMapping
     ResponseEntity<SubjectDto> updateSubject(@RequestBody SubjectDto dto);
 
-    @GetMapping("/{subject}")
-    ResponseEntity<SubjectDto> getSubject(@PathVariable String subject);
+    @GetMapping("/subject")
+    ResponseEntity<SubjectDto> getSubject(@RequestParam String subject);
 
     @GetMapping("/{id}")
     ResponseEntity<SubjectDto> getSubjectById(@PathVariable Integer id);

@@ -1,6 +1,7 @@
 package org.libraryaccountingproject.controllers;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.libraryaccountingproject.controllers.api.AuthorsAPI;
 import org.libraryaccountingproject.dtos.authorDtos.NewAuthorRequestDto;
@@ -32,7 +33,7 @@ public class PrivateAuthorsControllers implements AuthorsAPI {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<AuthorDataResponseDto> getAuthorById(@PathVariable Integer id) {
+    public ResponseEntity<AuthorDataResponseDto> getAuthorById(@PathVariable @Positive(message = "id should be a positive number") Integer id) {
         return new ResponseEntity<>(authorServices.findAuthorById(id),HttpStatus.FOUND);
     }
 

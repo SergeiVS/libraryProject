@@ -27,8 +27,8 @@ public class SubjectsController implements SubjectsAPI {
     }
 
 
-    @GetMapping("/{subject}")
-    public ResponseEntity<SubjectDto> getSubject(@PathVariable String subject) {
+    @GetMapping("/subject")
+    public ResponseEntity<SubjectDto> getSubject(@RequestParam String subject) {
         return new ResponseEntity<>(subjectServices.findSubjectByName(subject), HttpStatus.FOUND);
     }
 

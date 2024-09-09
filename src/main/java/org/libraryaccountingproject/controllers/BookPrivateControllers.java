@@ -37,14 +37,14 @@ public class BookPrivateControllers implements BookAPI {
     }
 
     @GetMapping("/book/{id}")
-    public ResponseEntity<BookResponseDto> getBookById(@PathVariable int id) {
+    public ResponseEntity<BookResponseDto> getBookById( @PathVariable int id) {
         return new ResponseEntity<>(bookServices.findBookById(id), HttpStatus.FOUND);
     }
 
 
     @GetMapping("/author/{id}")
     public  ResponseEntity<List<BookResponseDto>> getBooksByAuthorId(@Positive(message = "id must be positive number") @PathVariable int id) {
-        log.info("getBooksByAuthorId {}", id);
+
         return new ResponseEntity<>(bookServices.findBooksByAuthorId(id), HttpStatus.FOUND);
     }
 
