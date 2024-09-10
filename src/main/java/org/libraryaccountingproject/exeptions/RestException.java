@@ -1,4 +1,4 @@
-package org.libraryaccountingproject.services.exeptions;
+package org.libraryaccountingproject.exeptions;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

@@ -1,17 +1,15 @@
 package org.libraryaccountingproject.controllers;
 
-import org.libraryaccountingproject.services.exeptions.AlreadyExistException;
-import org.libraryaccountingproject.services.exeptions.NotCreatedException;
-import org.libraryaccountingproject.services.exeptions.NotFoundException;
+import org.libraryaccountingproject.exeptions.AlreadyExistException;
+import org.libraryaccountingproject.exeptions.NotCreatedException;
+import org.libraryaccountingproject.exeptions.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
-import java.sql.SQLIntegrityConstraintViolationException;
 
 @ControllerAdvice
 public class SearchExceptionsHandler {

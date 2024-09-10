@@ -8,7 +8,7 @@ import org.libraryaccountingproject.dtos.authorDtos.NewAuthorRequestDto;
 import org.libraryaccountingproject.dtos.authorDtos.AuthorDataResponseDto;
 import org.libraryaccountingproject.entities.Author;
 import org.libraryaccountingproject.repositories.AuthorsRepository;
-import org.libraryaccountingproject.services.exeptions.RestException;
+import org.libraryaccountingproject.exeptions.RestException;
 import org.libraryaccountingproject.services.utils.mappers.AuthorMappers;
 import org.libraryaccountingproject.services.utils.mappers.AuthorMappersImpl;
 import org.mockito.Mock;

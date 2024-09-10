@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.libraryaccountingproject.entities.ConfirmationMessage;
 import org.libraryaccountingproject.entities.User;
 import org.libraryaccountingproject.repositories.ConfirmationMessageRepository;
-import org.libraryaccountingproject.services.exeptions.RestException;
+import org.libraryaccountingproject.exeptions.RestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 

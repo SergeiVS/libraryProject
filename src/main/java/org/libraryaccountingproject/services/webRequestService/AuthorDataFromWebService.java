@@ -2,7 +2,7 @@ package org.libraryaccountingproject.services.webRequestService;
 
 import lombok.AllArgsConstructor;
 import org.libraryaccountingproject.dtos.authorsJsonData.AuthorDataFromWebResponseDto;
-import org.libraryaccountingproject.services.exeptions.NotFoundException;
+import org.libraryaccountingproject.exeptions.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.net.MalformedURLException;

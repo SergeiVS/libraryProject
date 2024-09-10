@@ -5,10 +5,13 @@ import org.libraryaccountingproject.dtos.userDtos.NewUserRequestDto;
 import org.libraryaccountingproject.dtos.userDtos.UserDataResponseDto;
 import org.libraryaccountingproject.entities.User;
 import org.libraryaccountingproject.entities.UserRole;
+import org.libraryaccountingproject.exeptions.NotFoundException;
 import org.libraryaccountingproject.repositories.UserRepository;
-import org.libraryaccountingproject.services.exeptions.AlreadyExistException;
+import org.libraryaccountingproject.exeptions.AlreadyExistException;
 import org.libraryaccountingproject.services.utils.mappers.UserMapper;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -39,6 +42,10 @@ public class UserServices {
         user.setUserState(User.UserState.valueOf("CONFIRMED"));
 
         return userMapper.toUserDataResponseDto(userRepository.save(user));
+    }
+
+    public Optional<User> findUserByLogin(String login) {
+        return userRepository.findByUserLogin(login);
     }
 
 

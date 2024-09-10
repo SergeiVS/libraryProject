@@ -11,7 +11,7 @@ import org.libraryaccountingproject.entities.Author;
 import org.libraryaccountingproject.entities.Book;
 import org.libraryaccountingproject.entities.BookSubject;
 import org.libraryaccountingproject.repositories.BooksRepository;
-import org.libraryaccountingproject.services.exeptions.NotFoundException;
+import org.libraryaccountingproject.exeptions.NotFoundException;
 import org.libraryaccountingproject.services.utils.mappers.BookMappers;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;

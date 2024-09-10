@@ -1,4 +1,4 @@
-package org.libraryaccountingproject.services.exeptions;
+package org.libraryaccountingproject.exeptions;
 
 public class AlreadyExistException extends RuntimeException {
     public AlreadyExistException(String message) {
