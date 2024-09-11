@@ -20,7 +20,7 @@ public class SecurityExceptionHandler {
     private static final ObjectMapper mapper = new ObjectMapper();
     private static final Logger logger = LoggerFactory.getLogger(SecurityExceptionHandler.class.getName());
 
-    private static final AuthenticationEntryPoint ENTRY_POINT = (request, response, authException) -> {
+    public static final AuthenticationEntryPoint ENTRY_POINT = (request, response, authException) -> {
         String message = "User not authorized";
 
         if (authException instanceof InvalidJwtException) {

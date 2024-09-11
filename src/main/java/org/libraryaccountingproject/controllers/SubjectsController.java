@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("api/private/subjects")
+@RequestMapping("api/users/subjects")
 @RequiredArgsConstructor
 public class SubjectsController implements SubjectsAPI {
 

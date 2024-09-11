@@ -19,7 +19,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/private/books")
+@RequestMapping("/api/users/books")
 @RequiredArgsConstructor
 public class BookPrivateControllers implements BookAPI {
 
