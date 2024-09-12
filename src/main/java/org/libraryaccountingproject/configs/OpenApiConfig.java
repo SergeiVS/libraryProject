@@ -20,6 +20,7 @@ import org.springdoc.core.GroupedOpenApi;
             return GroupedOpenApi.builder()
                     .group("Public")
                     .pathsToMatch("/api/public/**")
+                    .pathsToMatch("/api/auth/**")
                     .build();
         }
 
@@ -27,7 +28,7 @@ import org.springdoc.core.GroupedOpenApi;
         public GroupedOpenApi privateApi() {
             return GroupedOpenApi.builder()
                     .group("Private")
-                    .pathsToMatch("/api/private/**")
+                    .pathsToMatch("/api/users/**")
                     .build();
         }
 
@@ -35,9 +36,9 @@ import org.springdoc.core.GroupedOpenApi;
         public OpenAPI customOpenAPI() {
             return new OpenAPI()
                     .info(new Info()
-                            .title("My API")
+                            .title("Library Accounting Project")
                             .version("v1")
-                            .description("My API description"))
+                            .description("Library API description"))
                     .components(new Components()
                             .addSecuritySchemes("Bearer",
                                     new SecurityScheme()

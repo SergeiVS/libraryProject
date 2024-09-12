@@ -17,7 +17,7 @@ public class ConfirmationMessageServices {
 
     private final ConfirmationMessageRepository confirmationRepository;
 
-    public String createNewMessage(User user) {
+    public ConfirmationMessage createNewMessage(User user) {
 
         String message = UUID.randomUUID().toString();
 
@@ -27,8 +27,7 @@ public class ConfirmationMessageServices {
                 .expiredAt(LocalDateTime.now().plusHours(1))
                 .build();
         confirmationRepository.save(confirmationMessage);
-
-        return message;
+        return confirmationMessage;
     }
 
     public User confirm(String confirmationMessage) {

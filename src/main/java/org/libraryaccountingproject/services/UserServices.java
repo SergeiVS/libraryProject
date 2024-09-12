@@ -1,8 +1,10 @@
 package org.libraryaccountingproject.services;
 
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.libraryaccountingproject.dtos.userDtos.NewUserRequestDto;
 import org.libraryaccountingproject.dtos.userDtos.UserDataResponseDto;
+import org.libraryaccountingproject.entities.ConfirmationMessage;
 import org.libraryaccountingproject.entities.User;
 import org.libraryaccountingproject.entities.UserRole;
 import org.libraryaccountingproject.exeptions.NotFoundException;
@@ -20,17 +22,20 @@ public class UserServices {
     private final UserRepository userRepository;
     private final ConfirmationMessageServices confirmationService;
     private final UserMapper userMapper;
+    private final EmailSendService emailSendService;
 
-    public UserDataResponseDto registerNewReader(NewUserRequestDto requestDto) {
+    public UserDataResponseDto registerNewReader(NewUserRequestDto requestDto) throws MessagingException {
 
         userExistByLogin(requestDto.getUserLogin());
         userExistByEmail(requestDto.getUserEmail());
 
         User userForSave = buildNewReader(requestDto);
+        System.out.println(userForSave);
+        ConfirmationMessage confirmation = confirmationService.createNewMessage(userForSave);
+        userForSave.getConfirmationMessage().add(confirmation);
         User savedUser = userRepository.save(userForSave);
-        String confirmation = confirmationService.createNewMessage(savedUser);
-
-        sendConfirmationEmail(confirmation);
+        System.out.println(savedUser);
+        emailSendService.sendConfirmationEmail(savedUser);
 
         return userMapper.toUserDataResponseDto(savedUser);
     }
@@ -51,9 +56,7 @@ public class UserServices {
 
 //Private service methods
 
-    private void sendConfirmationEmail(String confirmationMessage) {
 
-    }
 
     private User buildNewReader(NewUserRequestDto requestDto) {
 
