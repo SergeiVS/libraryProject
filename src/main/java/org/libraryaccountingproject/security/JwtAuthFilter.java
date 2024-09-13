@@ -1,6 +1,5 @@
 package org.libraryaccountingproject.security;
 
-import ch.qos.logback.core.util.StringUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,13 +8,11 @@ import lombok.RequiredArgsConstructor;
 import org.libraryaccountingproject.exeptions.InvalidJwtException;
 import org.libraryaccountingproject.services.securityServices.AppUserDetailsService;
 import org.libraryaccountingproject.services.securityServices.JwtProvider;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -28,7 +25,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final AppUserDetailsService appUserDetailsService;
     private final JwtProvider jwtProvider;
-    private final AppAuthenticationEntryPoint appAuthenticationEntryPoint;
+    private final BasicAuthenticationEntryPoint basicAuthenticationEntryPoint;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -49,16 +46,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             }
         } catch (UsernameNotFoundException e) {
             logger.error("User not found", e);
-            appAuthenticationEntryPoint.commence(request, response, e);
-            return;
+            basicAuthenticationEntryPoint.commence(request, response, e);
         } catch (InvalidJwtException e) {
             logger.error("Invalid JWT token", e);
-            appAuthenticationEntryPoint.commence(request, response, e);
-            return;
+            basicAuthenticationEntryPoint.commence(request, response, e);
         } catch (Exception e) {
-            logger.error("Unecpected error in authentication", e);
+            logger.error("Unexpected error in authentication", e);
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            return;
         }
     }
 
