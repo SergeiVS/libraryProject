@@ -34,7 +34,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request, response);
                 return;
             }
-
+logger.info("starting jwt auth filter for uri " + request.getRequestURI());
             String jwt = getJwtFromRequest(request);
 
             if (StringUtils.hasText(jwt) && jwtProvider.validateJwtToken(jwt)) {
@@ -54,6 +54,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             logger.error("Unexpected error in authentication", e);
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
+        filterChain.doFilter(request, response);
+        logger.info("finished jwt auth filter for uri " + request.getRequestURI());
     }
 
     private String getJwtFromRequest(HttpServletRequest request) {

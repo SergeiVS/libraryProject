@@ -13,10 +13,10 @@ import java.util.Date;
 @Service
 public class JwtProvider {
 
-    @Value("JIUdiuiJIUSIUDHEFIUHIJOIU8347657657DPOQWKoi09a858")
+    @Value("${jwt.secret}")
     private String jwtSecret;
 
-    @Value("60000")
+    @Value("${jwt.lifetime}")
     private Long jwtExpiration;
 
     public SecretKeySpec getJwtSecret() {

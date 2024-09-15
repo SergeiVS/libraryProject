@@ -18,25 +18,25 @@ import org.springframework.stereotype.Service;
 @Data
 public class LoginService {
 
-private final JwtProvider jwtProvider;
-private final AuthenticationManager authenticationManager;
+    private final JwtProvider jwtProvider;
+    private final AuthenticationManager authenticationManager;
 
-private final UserServices userServices;
+    private final UserServices userServices;
 
-public ResponseEntity<LoginResponse> authenticate(LoginRequest loginRequest) {
+    public ResponseEntity<LoginResponse> authenticate(LoginRequest loginRequest) {
 
-Authentication authentication = authenticationManager.authenticate(
-        new UsernamePasswordAuthenticationToken(
-                loginRequest.getLogin(),
-                loginRequest.getPassword()
-        )
-);
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginRequest.getLogin(),
+                        loginRequest.getPassword()
+                )
+        );
 
-    SecurityContextHolder.getContext().setAuthentication(authentication);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
-    String jwt = jwtProvider.getJwtToken(authentication.getName());
+        String jwt = jwtProvider.getJwtToken(authentication.getName());
 
-    return ResponseEntity.ok(new LoginResponse(jwt));
-}
+        return ResponseEntity.ok(new LoginResponse(jwt));
+    }
 
 }
