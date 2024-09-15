@@ -31,9 +31,8 @@ public class UserServices {
 
         User userForSave = buildNewReader(requestDto);
         System.out.println(userForSave);
-        ConfirmationMessage confirmation = confirmationService.createNewMessage(userForSave);
-        userForSave.getConfirmationMessage().add(confirmation);
         User savedUser = userRepository.save(userForSave);
+        confirmationService.createNewMessage(savedUser);
         System.out.println(savedUser);
         emailSendService.sendConfirmationEmail(savedUser);
 

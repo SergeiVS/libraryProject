@@ -2,6 +2,7 @@ package org.libraryaccountingproject.controllers;
 
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.libraryaccountingproject.dtos.authDtos.LoginRequest;
 import org.libraryaccountingproject.dtos.authDtos.LoginResponse;
 import org.libraryaccountingproject.dtos.userDtos.NewUserRequestDto;
@@ -10,13 +11,12 @@ import org.libraryaccountingproject.services.UserServices;
 import org.libraryaccountingproject.services.authSevice.LoginService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController("/api/auth")
 @RequiredArgsConstructor
+@Slf4j
 public class AuthController {
 
     private final UserServices userServices;
@@ -31,7 +31,16 @@ public class AuthController {
     @PostMapping("/login")
 
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest dto) throws MessagingException {
-        System.out.println("Controller Entered");
-        return loginService.authenticate(dto);
+
+        log.info("Attempting to authenticate user: {}", dto.getLogin());
+
+        return new ResponseEntity<>(new LoginResponse(loginService.authenticate(dto)), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/login/basic")
+    public ResponseEntity<LoginResponse> loginBasic(@RequestHeader(value = "Authorization") String header) throws MessagingException {
+        log.info("Attempting to authenticate user: {}", header.isBlank());
+
+        return new ResponseEntity<>(new LoginResponse(loginService.basicAuthentication(header)), HttpStatus.CREATED);
     }
 }

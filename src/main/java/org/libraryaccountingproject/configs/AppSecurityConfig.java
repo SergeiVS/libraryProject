@@ -1,6 +1,7 @@
 package org.libraryaccountingproject.configs;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.libraryaccountingproject.security.BasicAuthFilter;
 import org.libraryaccountingproject.security.JwtAuthFilter;
 import org.libraryaccountingproject.security.SecurityExceptionHandler;
@@ -13,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -22,35 +24,38 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
+import static java.rmi.server.LogStream.log;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@Slf4j
 public class AppSecurityConfig {
 
     private final JwtAuthFilter filter;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-//        return NoOpPasswordEncoder.getInstance();
-        return new BCryptPasswordEncoder();
+        return NoOpPasswordEncoder.getInstance();
+//        return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public SecurityFilterChain appSecurityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(authorizeRequests -> authorizeRequests
+                .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/public/**").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/users/**").hasAnyRole("READER", "ADMIN", "LIBRARIAN", "MANAGER")
+                        .requestMatchers("/api/users/**").hasAnyRole("READER", "MANAGER", "LIBRARIAN", "ADMIN")
                         .anyRequest().authenticated())
                 .exceptionHandling(eh -> eh
                         .authenticationEntryPoint(SecurityExceptionHandler.ENTRY_POINT)
                         .accessDeniedHandler(SecurityExceptionHandler.ACCESS_DENY_HANDLER))
-//                .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
-                .addFilterBefore(new BasicAuthFilter(authenticationManager(http.getSharedObject(AuthenticationConfiguration.class))), UsernamePasswordAuthenticationFilter.class);
-
+                .addFilterBefore(new BasicAuthFilter(authenticationManager(http.getSharedObject(AuthenticationConfiguration.class))), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

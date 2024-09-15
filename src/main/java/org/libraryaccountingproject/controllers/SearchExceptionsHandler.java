@@ -1,5 +1,6 @@
 package org.libraryaccountingproject.controllers;
 
+import jakarta.mail.MessagingException;
 import org.libraryaccountingproject.exeptions.AlreadyExistException;
 import org.libraryaccountingproject.exeptions.NotCreatedException;
 import org.libraryaccountingproject.exeptions.NotFoundException;
@@ -41,6 +42,11 @@ public class SearchExceptionsHandler {
     }
     @ExceptionHandler(URISyntaxException.class)
     public ResponseEntity<String> handlerURISyntaxException(URISyntaxException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(MessagingException.class)
+    public ResponseEntity<String> handlerMessagingException(MessagingException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

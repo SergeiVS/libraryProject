@@ -5,6 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.libraryaccountingproject.exeptions.InvalidJwtException;
 import org.libraryaccountingproject.services.securityServices.AppUserDetailsService;
 import org.libraryaccountingproject.services.securityServices.JwtProvider;
@@ -13,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -21,11 +23,12 @@ import java.io.IOException;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final AppUserDetailsService appUserDetailsService;
     private final JwtProvider jwtProvider;
-    private final BasicAuthenticationEntryPoint basicAuthenticationEntryPoint;
+    private final AuthenticationEntryPoint basicAuthenticationEntryPoint;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -34,28 +37,37 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request, response);
                 return;
             }
-logger.info("starting jwt auth filter for uri " + request.getRequestURI());
+            log.info("starting jwt auth filter for uri {}", request.getRequestURI());
             String jwt = getJwtFromRequest(request);
+            log.info("jwtAuthFilter jwt= {}", jwt);
 
             if (StringUtils.hasText(jwt) && jwtProvider.validateJwtToken(jwt)) {
+
                 String userLogin = jwtProvider.getLoginFromJwtToken(jwt);
-                UserDetails userDetails = appUserDetailsService.loadUserByLogin(userLogin);
+                log.info("JwtProvider,user login: {}", userLogin);
+
+                UserDetails userDetails = appUserDetailsService.loadUserByUsername(userLogin);
+                log.info("JwtProvider,user details: {}", userDetails.getUsername());
+
                 Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                log.info("JwtProvider,authentication: {}", userDetails.getAuthorities());
+
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
             }
         } catch (UsernameNotFoundException e) {
-            logger.error("User not found", e);
+            log.error("User not found", e);
             basicAuthenticationEntryPoint.commence(request, response, e);
         } catch (InvalidJwtException e) {
-            logger.error("Invalid JWT token", e);
+            log.error("Invalid JWT token", e);
             basicAuthenticationEntryPoint.commence(request, response, e);
         } catch (Exception e) {
-            logger.error("Unexpected error in authentication", e);
+            log.error("Unexpected error in authentication", e);
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
+
         filterChain.doFilter(request, response);
-        logger.info("finished jwt auth filter for uri " + request.getRequestURI());
+        log.info("finished jwtAuthFilter  {} response status: {}", request.getUserPrincipal(), response.getStatus());
     }
 
     private String getJwtFromRequest(HttpServletRequest request) {

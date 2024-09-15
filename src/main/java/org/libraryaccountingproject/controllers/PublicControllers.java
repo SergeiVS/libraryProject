@@ -1,6 +1,7 @@
 package org.libraryaccountingproject.controllers;
 
 import annotations.ISBNValidation;
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.ISBN;
@@ -34,7 +35,7 @@ public class PublicControllers implements PublicAPI {
 
 
     @GetMapping("/authors/fullname")
-    public ResponseEntity<List<AuthorDataResponseDto>> getAuthorByFullName(@RequestParam String firstName, @RequestParam String lastName) {
+    public ResponseEntity<List<AuthorDataResponseDto>> getAuthorByFullName(@RequestParam @Nullable String firstName, @RequestParam @Nullable String lastName) {
         return new ResponseEntity<>(authorServices.findAuthorByFullname(firstName, lastName), HttpStatus.FOUND);
     }
 
