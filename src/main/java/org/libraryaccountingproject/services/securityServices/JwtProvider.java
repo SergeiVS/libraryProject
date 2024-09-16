@@ -15,19 +15,19 @@ import java.util.Date;
 @Service
 public class JwtProvider {
 
-//    @Value("${jwt.secret}")
-    private String jwtSecret ="JIUdiuiJIUSIUDHEFIUHIJOIU8347657657DPOQWKoi09a858";
+    @Value("${jwt.secret}")
+    private String secret;
 
-//    @Value("${jwt.lifetime}")
-    private Long jwtExpiration= 300000L;
+    @Value("${jwt.lifetime}")
+    private Long expiry;
 
     public Key getSigningKey() {
-        return new SecretKeySpec(jwtSecret.getBytes(), SignatureAlgorithm.HS256.getJcaName());
+        return new SecretKeySpec(secret.getBytes(), SignatureAlgorithm.HS256.getJcaName());
     }
 
     public String getJwtToken(String login) {
         Date timeStampNow = new Date();
-        Date expiryDate = new Date(timeStampNow.getTime() + jwtExpiration);
+        Date expiryDate = new Date(timeStampNow.getTime() + expiry);
 
         return Jwts.builder()
                 .setSubject(login)

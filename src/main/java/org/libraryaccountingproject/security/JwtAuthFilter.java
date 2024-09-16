@@ -38,6 +38,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 return;
             }
             log.info("starting jwt auth filter for uri {}", request.getRequestURI());
+
             String jwt = getJwtFromRequest(request);
             log.info("jwtAuthFilter jwt= {}", jwt);
 

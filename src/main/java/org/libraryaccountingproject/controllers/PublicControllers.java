@@ -12,6 +12,8 @@ import org.libraryaccountingproject.dtos.subjectDtos.SubjectDto;
 import org.libraryaccountingproject.services.AuthorServices;
 import org.libraryaccountingproject.services.BookServices;
 import org.libraryaccountingproject.services.SubjectServices;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PublicControllers implements PublicAPI {
 
+    private static final Logger log = LoggerFactory.getLogger(PublicControllers.class);
     private final AuthorServices authorServices;
     private final BookServices bookServices;
     private final SubjectServices subjectServices;
@@ -46,6 +49,7 @@ public class PublicControllers implements PublicAPI {
 
     @GetMapping("/books")
     public ResponseEntity<List<BookResponseDto>> getAllBooks() {
+        log.info("Find All Books");
         return new ResponseEntity<>(bookServices.findAllBooks(), HttpStatus.FOUND);
     }
 

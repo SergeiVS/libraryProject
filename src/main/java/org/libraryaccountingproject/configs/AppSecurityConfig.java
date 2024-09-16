@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.libraryaccountingproject.security.BasicAuthFilter;
 import org.libraryaccountingproject.security.JwtAuthFilter;
 import org.libraryaccountingproject.security.SecurityExceptionHandler;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -34,10 +35,11 @@ public class AppSecurityConfig {
 
     private final JwtAuthFilter filter;
 
+
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
-//        return new BCryptPasswordEncoder();
+    public PasswordEncoder passwordEncoder(){
+//        return NoOpPasswordEncoder.getInstance();
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
