@@ -48,11 +48,13 @@ public class User {
     @Email
     @Column(unique = true)
     private String email;
-    @NotBlank
+
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private UserRole userRole;
-    @NotBlank
+
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private UserState userState;
     @OneToMany(mappedBy = "user")
     @Column(name = "confirmations")

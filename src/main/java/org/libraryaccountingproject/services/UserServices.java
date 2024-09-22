@@ -2,6 +2,7 @@ package org.libraryaccountingproject.services;
 
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.libraryaccountingproject.dtos.userDtos.NewUserRequestDto;
 import org.libraryaccountingproject.dtos.userDtos.UserDataResponseDto;
 import org.libraryaccountingproject.entities.ConfirmationMessage;
@@ -17,6 +18,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserServices {
 
     private final UserRepository userRepository;
@@ -27,9 +29,10 @@ public class UserServices {
     public UserDataResponseDto registerNewReader(NewUserRequestDto requestDto) throws MessagingException {
 
         userExistByLogin(requestDto.getUserLogin());
-        userExistByEmail(requestDto.getUserEmail());
+        userExistByEmail(requestDto.getEmail());
 
         User userForSave = buildNewReader(requestDto);
+        log.info(userForSave.toString());
         System.out.println(userForSave);
         User savedUser = userRepository.save(userForSave);
         confirmationService.createNewMessage(savedUser);
@@ -61,8 +64,10 @@ public class UserServices {
 
 
         User userForSave = userMapper.toUser(requestDto);
-        userForSave.setUserRole(UserRole.valueOf("READER"));
-        userForSave.setUserState(User.UserState.valueOf("REGISTERED"));
+        userForSave.setEmail(requestDto.getEmail());
+        userForSave.setUserRole(UserRole.READER);
+        userForSave.setUserState(User.UserState.REGISTERED);
+        log.info(userForSave.toString());
         return userForSave;
     }
 

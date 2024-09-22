@@ -1,6 +1,7 @@
 package org.libraryaccountingproject.controllers;
 
 import jakarta.mail.MessagingException;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.libraryaccountingproject.dtos.authDtos.LoginRequest;
@@ -14,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-@RestController("/api/auth")
+@RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
 @Slf4j
@@ -24,8 +25,9 @@ public class AuthController {
     private final LoginService loginService;
 
     @PostMapping("/register")
-    public ResponseEntity<UserDataResponseDto> registerNewUser(@RequestBody NewUserRequestDto dto) throws MessagingException {
+    public ResponseEntity<UserDataResponseDto> registerNewUser(@Valid @RequestBody NewUserRequestDto dto) throws MessagingException {
         System.out.println("Controller Entered");
+        log.info(dto.toString());
         return new ResponseEntity<>(userServices.registerNewReader(dto), HttpStatus.CREATED);
     }
 
