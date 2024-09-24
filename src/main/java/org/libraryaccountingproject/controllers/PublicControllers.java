@@ -1,6 +1,6 @@
 package org.libraryaccountingproject.controllers;
 
-import annotations.ISBNValidation;
+import org.libraryaccountingproject.annotations.ISBNValidation;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;

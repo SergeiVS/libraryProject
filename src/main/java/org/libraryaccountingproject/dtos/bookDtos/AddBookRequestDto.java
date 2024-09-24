@@ -1,17 +1,15 @@
 package org.libraryaccountingproject.dtos.bookDtos;
 
-import annotations.ISBNValidation;
-import annotations.StringFormatValidation;
-import annotations.SubjectValidation;
+import org.libraryaccountingproject.annotations.ISBNValidation;
+import org.libraryaccountingproject.annotations.StringFormatValidation;
+import org.libraryaccountingproject.annotations.SubjectValidation;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.ISBN;
-import org.springframework.format.annotation.NumberFormat;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

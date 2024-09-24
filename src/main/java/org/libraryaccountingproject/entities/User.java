@@ -1,7 +1,7 @@
 package org.libraryaccountingproject.entities;
 
-import annotations.NameFormatValidation;
-import annotations.StringFormatValidation;
+import org.libraryaccountingproject.annotations.NameFormatValidation;
+import org.libraryaccountingproject.annotations.StringFormatValidation;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

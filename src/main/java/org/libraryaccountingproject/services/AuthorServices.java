@@ -1,7 +1,7 @@
 package org.libraryaccountingproject.services;
 
-import annotations.NameFormatValidation;
-import annotations.StringFormatValidation;
+import org.libraryaccountingproject.annotations.NameFormatValidation;
+import org.libraryaccountingproject.annotations.StringFormatValidation;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

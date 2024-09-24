@@ -1,9 +1,8 @@
-package annotations;
+package org.libraryaccountingproject.annotations;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-import javax.security.auth.Subject;
 import java.util.ArrayList;
 import java.util.List;
 

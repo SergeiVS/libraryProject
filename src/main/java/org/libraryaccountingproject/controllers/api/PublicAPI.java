@@ -1,6 +1,6 @@
 package org.libraryaccountingproject.controllers.api;
 
-import annotations.ISBNValidation;
+import org.libraryaccountingproject.annotations.ISBNValidation;
 import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.ISBN;
 import org.libraryaccountingproject.dtos.authorDtos.AuthorDataResponseDto;

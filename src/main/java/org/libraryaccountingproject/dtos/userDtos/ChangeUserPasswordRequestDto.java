@@ -1,7 +1,7 @@
 package org.libraryaccountingproject.dtos.userDtos;
 
-import annotations.PasswordValidation;
-import annotations.StringFormatValidation;
+import org.libraryaccountingproject.annotations.PasswordValidation;
+import org.libraryaccountingproject.annotations.StringFormatValidation;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;

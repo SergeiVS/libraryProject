@@ -1,4 +1,4 @@
-package annotations;
+package org.libraryaccountingproject.annotations;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
@@ -33,6 +33,7 @@ public class PasswordValidation implements ConstraintValidator<StringFormatValid
             errors.forEach(error -> addConstraintViolation(context, error));
             return false;
         }
+
 
 
         return true;

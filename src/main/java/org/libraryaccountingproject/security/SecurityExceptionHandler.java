@@ -1,10 +1,8 @@
 package org.libraryaccountingproject.security;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;
 import org.libraryaccountingproject.dtos.authDtos.StandardResponse;
-import org.libraryaccountingproject.entities.User;
 import org.libraryaccountingproject.exeptions.InvalidJwtException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +42,7 @@ public class SecurityExceptionHandler {
 
             StandardResponse standardResponse = new StandardResponse(message + ":" + status.value());
             String body = mapper.writeValueAsString(standardResponse);
-
+            response.getWriter().write(body);
         } catch (Exception e) {
 
             logger.error("Failed to write response: ", e);

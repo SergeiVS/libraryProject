@@ -1,4 +1,4 @@
-package annotations;
+package org.libraryaccountingproject.annotations;
 
 import jakarta.validation.Payload;
 

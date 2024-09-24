@@ -1,7 +1,7 @@
 package org.libraryaccountingproject.dtos.userDtos;
 
-import annotations.NameFormatValidation;
-import annotations.StringFormatValidation;
+import org.libraryaccountingproject.annotations.NameFormatValidation;
+import org.libraryaccountingproject.annotations.StringFormatValidation;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
